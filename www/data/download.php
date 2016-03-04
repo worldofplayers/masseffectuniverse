@@ -98,6 +98,8 @@ if ($show == TRUE) {
                           FROM ".$global_config_arr[pref]."dl
                           $query dl_open = 1
                           ORDER BY dl_name", $db);
+						  
+	$filecount = mysql_num_rows ( $index );
 
     if ( mysql_num_rows ( $index ) > 0 ) {
         $dateien = "";
@@ -175,5 +177,9 @@ $template = $template->display ();
 
 //Seitentitel
 $global_config_arr['dyn_title_page'] = $page_titel;
+
+$global_config_arr['dyn_description_page'] = 'Hier findest du alle Downloads aus dem Bereich ' . $page_titel . '.';
+if ($filecount > 5)
+	$global_config_arr['dyn_description_page'] .= " " . $filecount . ' Downloads warten auf Dich!';
 
 ?>
