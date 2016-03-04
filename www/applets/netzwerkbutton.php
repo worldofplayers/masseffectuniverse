@@ -1,0 +1,1 @@
+<?php $template = file_get_contents("/var/www/inc/netzwerk124.inc.php"); ?>
