@@ -65,7 +65,8 @@ if (isset($_GET[catid]))
         if ($cat_arr[cat_type]==2)
         {
             $zaehler = 0;
-            $index = mysql_query("SELECT * FROM ".$global_config_arr[pref]."wallpaper WHERE cat_id = $cat_arr[cat_id] ORDER BY wallpaper_id $config_arr[wp_sort] LIMIT $config_arr[page_start],$config_arr[pics_per_page]", $db);
+            $index = mysql_query("SELECT * FROM ".$global_config_arr[pref]."wallpaper WHERE cat_id = $cat_arr[cat_id] ORDER BY wallpaper_id $config_arr[wp_sort] LIMIT $config_arr[page_start],$config_arr[pics_per_page]", $db);		
+			$actual_number_of_screens = mysql_num_rows($index);
             while ($wp_arr = mysql_fetch_assoc($index))
             {
                 $wp_arr[thumb_url] = image_url("images/wallpaper/", $wp_arr[wallpaper_name]."_s");
@@ -128,6 +129,7 @@ if (isset($_GET[catid]))
         {
             $zaehler = 0;
             $index = mysql_query("SELECT * FROM ".$global_config_arr[pref]."screen WHERE cat_id = $cat_arr[cat_id] ORDER by screen_id $config_arr[screen_sort] LIMIT $config_arr[page_start],$config_arr[pics_per_page]", $db);
+			$actual_number_of_screens = mysql_num_rows($index);
 
             while ($screen_arr = mysql_fetch_assoc($index))
             {
@@ -197,6 +199,9 @@ if (isset($_GET[catid]))
     $template->tag("name", stripslashes ( $cat_arr[cat_name] ) );
     $template->tag("screenshots", $pics );
     $template->tag("page_nav", $pagenav );
+	
+	$global_config_arr['dyn_title_page'] = stripslashes ( $cat_arr[cat_name] . " Seite " . $_GET['page'] );
+	$global_config_arr['dyn_description_page'] = 'Screenshots aus dem Bereich ' . stripslashes ( $cat_arr[cat_name] ) . ' Nummer ' . ($config_arr[page_start]  + 1) . ' bis ' . ($config_arr[page_start] +  $actual_number_of_screens);
 
     $template = $template->display ();
 }

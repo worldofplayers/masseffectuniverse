@@ -104,6 +104,11 @@ else
     
     // Dynamic Title Settings
     $global_config_arr['dyn_title_page'] = $article_arr['article_title'];
+	$catname = mysql_fetch_assoc(mysql_query("SELECT cat_name FROM ".$global_config_arr['pref']."articles_cat WHERE cat_id=" . $article_arr['article_cat_id']));
+	if (strlen($catname['cat_name']) > 0)
+		$global_config_arr['dyn_description_page'] = 'Alles zum Thema ' . strip_prefix_tags($article_arr['article_title']) . ' aus unserem Bereich ' . $catname['cat_name'] . ': ' . strip_nl_tags_menus($article_arr['article_text']);
+	else
+		$global_config_arr['dyn_description_page'] = 'Alles zum Thema ' . strip_prefix_tags($article_arr['article_title']) . ': ' . strip_nl_tags_menus($article_arr['article_text']);
     $global_config_arr['content_author'] = stripslashes ( $user_arr['user_name'] );
 }
 
