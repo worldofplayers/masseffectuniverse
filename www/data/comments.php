@@ -43,16 +43,23 @@ if ( $config_arr['com_rights'] == 2 || ( $config_arr['com_rights'] == 1 && $_SES
 }
 
 //////////////////////////////
-//// Kommentar hinzufügen ////
+//// Kommentar hinzufï¿½gen ////
 //////////////////////////////
 
 if (isset($_POST['add_comment']))
 {
+    define ("ENDE", time());
     if ($_POST[id]
          && ($_POST[name] != "" || $_SESSION["user_id"])
          && $_POST[title] != ""
          && $_POST[text] != ""
-         && $anti_spam == TRUE)
+         && $anti_spam == TRUE
+         && isset($_POST['dudu'])
+         && ((ENDE - strrev($_POST['dudu'])) > 11)
+         && ((ENDE - strrev($_POST['dudu'])) < 1801)  
+         && $_POST['email_form'] == ""
+         && !isset($_POST['bot'])   
+        )
     {
                 settype($_POST[id], 'integer');
                 $index = mysql_query( "
