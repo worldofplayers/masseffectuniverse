@@ -1,17 +1,30 @@
 <?php
+$shop = $_GET["shop_cat"];
+
 // Load Config Array
 $index = mysql_query ( "
                         SELECT `show_type`, `show_size_x`, `show_size_y`
                         FROM `".$global_config_arr['pref']."screen_config`
-                        WHERE `id` = 1
+                        WHERE `id` = 1 
 ", $db);
 $screen_config_arr = mysql_fetch_assoc ( $index );
 
-// Get Data from DB
-$index = mysql_query ( "
-                        SELECT *
-                        FROM `".$global_config_arr['pref']."shop`
-", $db );
+if ($shop === NULL) {
+	// Get Data from DB
+	$index = mysql_query ( "
+							SELECT *
+							FROM `".$global_config_arr['pref']."shop`
+							WHERE `tipp` = 1 
+	", $db );
+}
+else {
+	// Get Data from DB
+	$index = mysql_query ( "
+							SELECT *
+							FROM `".$global_config_arr['pref']."shop`
+							WHERE `kategorie` = {$shop}
+	", $db );
+}
 
 // Security Functions
 $shop_items = array();
@@ -32,6 +45,7 @@ while ( $shop_arr = mysql_fetch_assoc ( $index ) ) {
     $template_item->setFile("0_shop.tpl");
     $template_item->load("SHOP_ITEM");
 
+	$template_item->tag("item_kategorie", $shop_arr['kategorie']);
     $template_item->tag("item_titel", $shop_arr['artikel_name'] );
     $template_item->tag("item_text", $shop_arr['artikel_text'] );
     $template_item->tag("item_url", stripslashes ( $shop_arr['artikel_url'] ) );
