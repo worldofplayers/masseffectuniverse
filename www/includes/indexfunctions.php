@@ -176,8 +176,21 @@ function get_meta ()
         $keyword_arr[$key] = trim ( $value );
     }
     $keywords = implode ( ", ", $keyword_arr );
-
+	
+	$noindexlist = array("news_search", "press", "topoderflop", "user_list", "user", "search", "polls", "shop");	
+	if (in_array($global_config_arr['goto'], $noindexlist))	
+		$robotcontrol = "noindex";
+	else
+		$robotcontrol = "index,follow";
+		
+	$global_config_arr['dyn_description_page'] = substr(strip_tags($global_config_arr['dyn_description_page']), 0, 161);
+	if (strlen($global_config_arr['dyn_description_page']) > 160)
+		$global_config_arr['dyn_description_page'] = htmlentities(substr($global_config_arr['dyn_description_page'], 0, strrpos($global_config_arr['dyn_description_page'], " ")));
+	if (strlen($global_config_arr['dyn_description_page']) > 0)
+		$global_config_arr['description'] = $global_config_arr['dyn_description_page'];
+		
     $template = '
+    <base href="' . $global_config_arr['virtualhost'] . '" /><!--[if IE]></base><![endif]-->
     <meta name="title" content="'.get_title ().'">'.get_meta_author ().'
     <meta name="publisher" content="'.$global_config_arr['publisher'].'">
     <meta name="copyright" content="'.$global_config_arr['copyright'].'">
@@ -185,7 +198,7 @@ function get_meta ()
     <meta name="description" content="'.$global_config_arr['description'].'">'.get_meta_abstract ().'
     <meta http-equiv="content-language" content="'.$global_config_arr['language'].'">
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <meta name="robots" content="index,follow">
+    <meta name="robots" content="' . $robotcontrol . '">
     <meta name="Revisit-after" content="3 days">
     <meta name="DC.Title" content="'.get_title ().'">'.get_meta_author ( TRUE ).'
     <meta name="DC.Rights" content="'.$global_config_arr['copyright'].'">
@@ -196,6 +209,9 @@ function get_meta ()
     <meta name="keywords" lang="'.$global_config_arr['language'].'" content="'.$keywords.'">
     ';
 
+	if (!headers_sent())
+		header("Content-Type: text/html; charset=ISO-8859-1");
+	
     return $template;
 }
 
@@ -644,7 +660,7 @@ function delete_old_randoms ()
   global $global_config_arr;
 
   if ($global_config_arr[random_timed_deltime] != -1) {
-    // Alte Zufallsbild-Einträge aus der Datenbank entfernen
+    // Alte Zufallsbild-Eintrï¿½ge aus der Datenbank entfernen
     mysql_query("DELETE a
                 FROM ".$global_config_arr[pref]."screen_random a, ".$global_config_arr[pref]."global_config b
                 WHERE a.end < UNIX_TIMESTAMP()-b.random_timed_deltime", $db);

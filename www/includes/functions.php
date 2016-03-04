@@ -768,13 +768,13 @@ if ($all==true OR $fs_center==1) {
 
 
 if ($all==true OR $fs_font==1) {
-  $buttons .= create_textarea_button('font.gif', "FONT", "Schriftart", "insert_com('$name', 'font', 'Bitte gib die gewünschte Schriftart ein:', '')");
+  $buttons .= create_textarea_button('font.gif', "FONT", "Schriftart", "insert_com('$name', 'font', 'Bitte gib die gewï¿½nschte Schriftart ein:', '')");
 }
 if ($all==true OR $fs_color==1) {
-  $buttons .= create_textarea_button('color.gif', "COLOR", "Schriftfarbe", "insert_com('$name', 'color', 'Bitte gib die gewünschte Schriftfarbe (englisches Wort) ein:', '')");
+  $buttons .= create_textarea_button('color.gif', "COLOR", "Schriftfarbe", "insert_com('$name', 'color', 'Bitte gib die gewï¿½nschte Schriftfarbe (englisches Wort) ein:', '')");
 }
 if ($all==true OR $fs_size==1) {
-  $buttons .= create_textarea_button('size.gif', "SIZE", "Schriftgröße", "insert_com('$name', 'size', 'Bitte gib die gewünschte Schriftgröße (Zahl von 0-7) ein:', '')");
+  $buttons .= create_textarea_button('size.gif', "SIZE", "Schriftgrï¿½ï¿½e", "insert_com('$name', 'size', 'Bitte gib die gewï¿½nschte Schriftgrï¿½ï¿½e (Zahl von 0-7) ein:', '')");
 }
 
 
@@ -784,10 +784,10 @@ if ($all==true OR $fs_font==1 OR $fs_color==1 OR $fs_size==1) {
 
 
 if ($all==true OR $fs_img==1) {
-  $buttons .= create_textarea_button('img.gif', "IMG", "Bild einfügen", "insert_mcom('$name', '[img]', '[/img]', 'Bitte gib die URL zu der Grafik ein:', 'http://')");
+  $buttons .= create_textarea_button('img.gif', "IMG", "Bild einfï¿½gen", "insert_mcom('$name', '[img]', '[/img]', 'Bitte gib die URL zu der Grafik ein:', 'http://')");
 }
 if ($all==true OR $fs_cimg==1) {
-  $buttons .= create_textarea_button('cimg.gif', "CIMG", "Content-Image einfügen", "insert_mcom('$name', '[cimg]', '[/cimg]', 'Bitte gib den Namen des Content-Images (mit Endung) ein:', '')");
+  $buttons .= create_textarea_button('cimg.gif', "CIMG", "Content-Image einfï¿½gen", "insert_mcom('$name', '[cimg]', '[/cimg]', 'Bitte gib den Namen des Content-Images (mit Endung) ein:', '')");
 }
 
 
@@ -797,13 +797,13 @@ if ($all==true OR $fs_img==1 OR $fs_cimg==1) {
 
 
 if ($all==true OR $fs_url==1) {
-  $buttons .= create_textarea_button('url.gif', "URL", "Link einfügen", "insert_com('$name', 'url', 'Bitte gib die URL ein:', 'http://')");
+  $buttons .= create_textarea_button('url.gif', "URL", "Link einfï¿½gen", "insert_com('$name', 'url', 'Bitte gib die URL ein:', 'http://')");
 }
 if ($all==true OR $fs_home==1) {
-  $buttons .= create_textarea_button('home.gif', "HOME", "Projektinternen Link einfügen", "insert_com('$name', 'home', 'Bitte gib den projektinternen Verweisnamen ein:', '')");
+  $buttons .= create_textarea_button('home.gif', "HOME", "Projektinternen Link einfï¿½gen", "insert_com('$name', 'home', 'Bitte gib den projektinternen Verweisnamen ein:', '')");
 }
 if ($all==true OR $fs_email==1) {
-  $buttons .= create_textarea_button('email.gif', "@", "Email-Link einfügen", "insert_com('$name', 'email', 'Bitte gib die Email-Adresse ein:', '')");
+  $buttons .= create_textarea_button('email.gif', "@", "Email-Link einfï¿½gen", "insert_com('$name', 'email', 'Bitte gib die Email-Adresse ein:', '')");
 }
 
 
@@ -813,13 +813,13 @@ if ($all==true OR $fs_url==1 OR $fs_home==1 OR $fs_email==1) {
 
 
 if ($all==true OR $fs_code==1) {
-  $buttons .= create_textarea_button('code.gif', "C", "Code-Bereich einfügen", "insert('$name', '[code]', '[/code]')");
+  $buttons .= create_textarea_button('code.gif', "C", "Code-Bereich einfï¿½gen", "insert('$name', '[code]', '[/code]')");
 }
 if ($all==true OR $fs_quote==1) {
-  $buttons .= create_textarea_button('quote.gif', "Q", "Zitat einfügen", "insert('$name', '[quote]', '[/quote]')");
+  $buttons .= create_textarea_button('quote.gif', "Q", "Zitat einfï¿½gen", "insert('$name', '[quote]', '[/quote]')");
 }
 if ($all==true OR $fs_noparse==1) {
-  $buttons .= create_textarea_button('noparse.gif', "N", "Nicht umzuwandelnden Bereich einfügen", "insert('$name', '[noparse]', '[/noparse]')");
+  $buttons .= create_textarea_button('noparse.gif', "N", "Nicht umzuwandelnden Bereich einfï¿½gen", "insert('$name', '[noparse]', '[/noparse]')");
 }
 
     // Get Template
@@ -885,7 +885,17 @@ function create_textarea_seperator()
 
 function sys_message ( $TITLE, $MESSAGE )
 {
-    global $db, $global_config_arr;
+    global $db, $global_config_arr, $phrases;
+	
+	$messages404 = array($phrases[article_not_found], 
+					  	 $phrases[news_not_exist],
+						 $phrases[dl_not_exist],
+						 $phrases[no_pics],
+						 $phrases[user_not_found]);
+	
+	// Wird dem Menschen eine Not-Found-Meldung gezeigt, dies auch per HTTP-Code anzeigen.
+	if (in_array($MESSAGE, $messages404))
+		header("Status: 404 Not Found", true, 404);
 
     $template = new template();
 
@@ -945,7 +955,7 @@ function point_number ($zahl)
 }
 
 /////////////////////////////////////////
-// String kürzen ohne Wort zuzerstören //  <= BAD FUNCTION HAS TO BE IMPROVED
+// String kï¿½rzen ohne Wort zuzerstï¿½ren //  <= BAD FUNCTION HAS TO BE IMPROVED
 /////////////////////////////////////////
 function truncate_string ($string, $maxlength, $extension)
 {
@@ -961,7 +971,7 @@ function truncate_string ($string, $maxlength, $extension)
 }
 
 /////////////////////////////////////////
-// String innerhalb sich selbst kürzen //
+// String innerhalb sich selbst kï¿½rzen //
 /////////////////////////////////////////
 function cut_in_string ($string, $maxlength, $replacement)
 {
@@ -1104,7 +1114,7 @@ function display_news ($news_arr, $html_code, $fs_code, $para_handling)
         $related_links = "";
     }
 
-    // Template lesen und füllen
+    // Template lesen und fï¿½llen
     $template = new template();
     $template->setFile("0_news.tpl");
     $template->load("NEWS_BODY");
@@ -1332,7 +1342,7 @@ function fscode($text, $all=true, $html=false, $para=false, $do_b=0, $do_i=0, $d
         $bbcode->addCode ('noparse', 'usecontent', 'do_bbcode_noparse', array (),
                           'inline', array ('listitem', 'block', 'inline', 'link'), array ());
 
-        if ($para==true) {
+		if ($para==true) {
             $bbcode->setRootParagraphHandling (true);
         }
 
