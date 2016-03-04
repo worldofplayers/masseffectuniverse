@@ -644,7 +644,7 @@ function delete_old_randoms ()
   global $global_config_arr;
 
   if ($global_config_arr[random_timed_deltime] != -1) {
-    // Alte Zufallsbild-Einträge aus der Datenbank entfernen
+    // Alte Zufallsbild-Eintrï¿½ge aus der Datenbank entfernen
     mysql_query("DELETE a
                 FROM ".$global_config_arr[pref]."screen_random a, ".$global_config_arr[pref]."global_config b
                 WHERE a.end < UNIX_TIMESTAMP()-b.random_timed_deltime", $db);
@@ -725,5 +725,80 @@ function copyright ()
             $global_config_arr['style'] =  "default";
         }
     }
+}
+
+
+// CACHING
+function cache_output_template($text)
+{
+    // Direkt als gzip-encoded speichern
+    $size = strlen($text);
+    $crc = crc32($text);
+
+    $gziptext = "\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff";
+    $gziptext .= substr(gzcompress($text), 2, -4);
+    $gziptext .= pack('V', $crc);
+    $gziptext .= pack('V', $size);
+
+    apc_store($_SERVER["HTTP_HOST"] . '_startseite', $gziptext);
+}
+
+// Nur die Startseite und nur bei Gaesten cachen, d.h. es darf maximal die Session-ID als Parameter gesetzt sein
+$docaching = false;
+$cacheoutput = false;
+
+if ((count($_REQUEST) == 0) || ((count($_REQUEST) == 1) && (isset($_REQUEST[ini_get('session.name')]))))
+{
+    // Session muss auï¿½erdem leer sein
+    session_start();
+    if (count($_SESSION) == 0)
+        $docaching = true;
+}
+
+// Caching ist moeglich
+if ($docaching)
+{
+    // Cache ist gzip-encoded, daher muss dies der Client auch akzeptieren koennen
+    if (strpos(' ' . $_SERVER['HTTP_ACCEPT_ENCODING'], 'x-gzip') !== false)
+        $encoding = 'x-gzip';
+    elseif (strpos(' ' . $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false)
+        $encoding = 'gzip';
+    else
+        $encoding = '';
+
+    if ($encoding != '')
+    {
+        $cachetext = apc_fetch($_SERVER["HTTP_HOST"] . '_startseite');
+
+        // Gibt es einen Cache?
+        if ($cachetext != '')
+        {
+            // Das FS2 muss dennoch im Hintergrund weiterlaufen
+            ignore_user_abort(1);
+            @set_time_limit(0);
+
+            header("Content-Encoding: " . $encoding);
+
+            // Hindurch weiss der Browser, dass keine weiteren Daten mehr kommen, obwohl der Skript nicht weiterlaeuft
+            header("Content-Length: " . strlen($cachetext));
+            header('Connection: Close');
+
+            // Kein Caching durch den Browser
+            header('Expires: Thu, 19 Nov 1981 08:53:00 GMT');
+            header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: no-cache');
+            header('Vary: Accept-Encoding');
+            header('Content-Type: text/html; charset=ISO-8859-1');
+
+            // Daten sind schon gzip-encoded, nicht noch einmal durch mod_deflate verarbeiten lassen
+            apache_setenv('no-gzip', '1');
+            echo $cachetext;
+            $cacheoutput = true;
+        }
+
+        unset($cachetext);
+    }
+
+    unset($encoding);
 }
 ?>

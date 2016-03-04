@@ -38,9 +38,6 @@ if ( $db && isset($global_config_arr) ) {
     set_style ();
     copyright ();
     get_goto ( $_GET['go'] );
-    count_all ( $global_config_arr['goto'] );
-    save_referer ();
-    save_visitors ();
 
     // Create Index-Template
     $template_general = new template();
@@ -50,7 +47,11 @@ if ( $db && isset($global_config_arr) ) {
     
     $template_general->tag("content", get_content ( $global_config_arr['goto'] ));
     $template_general->tag("copyright",  get_copyright ());
-
+	
+    count_all ( $global_config_arr['goto'] );
+    save_referer ();
+    save_visitors ();			
+	
     $template_general = $template_general->display();
 
     $template_general = replace_snippets ( $template_general );
@@ -66,8 +67,13 @@ if ( $db && isset($global_config_arr) ) {
     $template = str_replace ( "{..body..}", $template_general, $template);
 
     // Display Page
-    echo $template;
+	if (!$cacheoutput)
+		echo $template;
 
+	// Bei Bedarf Endergebnis cachen
+	if ($docaching)
+		cache_output_template($template);
+		
     // Close Connection
     mysql_close ( $db );
 }
