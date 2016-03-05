@@ -726,13 +726,13 @@ if ($all==true OR $fs_center==1) {
 
 
 if ($all==true OR $fs_font==1) {
-  $buttons .= create_textarea_button('font.gif', 'FONT', 'Schriftart', "insert_com('$name', 'font', 'Bitte gib die gewünschte Schriftart ein:', '')");
+  $buttons .= create_textarea_button('font.gif', 'FONT', 'Schriftart', "insert_com('$name', 'font', 'Bitte gib die gewï¿½nschte Schriftart ein:', '')");
 }
 if ($all==true OR $fs_color==1) {
-  $buttons .= create_textarea_button('color.gif', 'COLOR', 'Schriftfarbe', "insert_com('$name', 'color', 'Bitte gib die gewünschte Schriftfarbe (englisches Wort) ein:', '')");
+  $buttons .= create_textarea_button('color.gif', 'COLOR', 'Schriftfarbe', "insert_com('$name', 'color', 'Bitte gib die gewï¿½nschte Schriftfarbe (englisches Wort) ein:', '')");
 }
 if ($all==true OR $fs_size==1) {
-  $buttons .= create_textarea_button('size.gif', 'SIZE', 'Schriftgröße', "insert_com('$name', 'size', 'Bitte gib die gewünschte Schriftgröße (Zahl von 0-7) ein:', '')");
+  $buttons .= create_textarea_button('size.gif', 'SIZE', 'Schriftgrï¿½ï¿½e', "insert_com('$name', 'size', 'Bitte gib die gewï¿½nschte Schriftgrï¿½ï¿½e (Zahl von 0-7) ein:', '')");
 }
 
 
@@ -742,10 +742,10 @@ if ($all==true OR $fs_font==1 OR $fs_color==1 OR $fs_size==1) {
 
 
 if ($all==true OR $fs_img==1) {
-  $buttons .= create_textarea_button('img.gif', 'IMG', 'Bild einfügen', "insert_mcom('$name', '[img]', '[/img]', 'Bitte gib die URL zu der Grafik ein:', 'http://')");
+  $buttons .= create_textarea_button('img.gif', 'IMG', 'Bild einfï¿½gen', "insert_mcom('$name', '[img]', '[/img]', 'Bitte gib die URL zu der Grafik ein:', 'http://')");
 }
 if ($all==true OR $fs_cimg==1) {
-  $buttons .= create_textarea_button('cimg.gif', 'CIMG', 'Content-Image einfügen', "insert_mcom('$name', '[cimg]', '[/cimg]', 'Bitte gib den Namen des Content-Images (mit Endung) ein:', '')");
+  $buttons .= create_textarea_button('cimg.gif', 'CIMG', 'Content-Image einfï¿½gen', "insert_mcom('$name', '[cimg]', '[/cimg]', 'Bitte gib den Namen des Content-Images (mit Endung) ein:', '')");
 }
 
 
@@ -755,13 +755,13 @@ if ($all==true OR $fs_img==1 OR $fs_cimg==1) {
 
 
 if ($all==true OR $fs_url==1) {
-  $buttons .= create_textarea_button('url.gif', 'URL', 'Link einfügen', "insert_com('$name', 'url', 'Bitte gib die URL ein:', 'http://')");
+  $buttons .= create_textarea_button('url.gif', 'URL', 'Link einfï¿½gen', "insert_com('$name', 'url', 'Bitte gib die URL ein:', 'http://')");
 }
 if ($all==true OR $fs_home==1) {
-  $buttons .= create_textarea_button('home.gif', 'HOME', 'Projektinternen Link einfügen', "insert_com('$name', 'home', 'Bitte gib den projektinternen Verweisnamen ein:', '')");
+  $buttons .= create_textarea_button('home.gif', 'HOME', 'Projektinternen Link einfï¿½gen', "insert_com('$name', 'home', 'Bitte gib den projektinternen Verweisnamen ein:', '')");
 }
 if ($all==true OR $fs_email==1) {
-  $buttons .= create_textarea_button('email.gif', '@', 'Email-Link einfügen', "insert_com('$name', 'email', 'Bitte gib die Email-Adresse ein:', '')");
+  $buttons .= create_textarea_button('email.gif', '@', 'Email-Link einfï¿½gen', "insert_com('$name', 'email', 'Bitte gib die Email-Adresse ein:', '')");
 }
 
 
@@ -771,13 +771,13 @@ if ($all==true OR $fs_url==1 OR $fs_home==1 OR $fs_email==1) {
 
 
 if ($all==true OR $fs_code==1) {
-  $buttons .= create_textarea_button('code.gif', 'C', 'Code-Bereich einfügen', "insert('$name', '[code]', '[/code]')");
+  $buttons .= create_textarea_button('code.gif', 'C', 'Code-Bereich einfï¿½gen', "insert('$name', '[code]', '[/code]')");
 }
 if ($all==true OR $fs_quote==1) {
-  $buttons .= create_textarea_button('quote.gif', 'Q', 'Zitat einfügen', "insert('$name', '[quote]', '[/quote]')");
+  $buttons .= create_textarea_button('quote.gif', 'Q', 'Zitat einfï¿½gen', "insert('$name', '[quote]', '[/quote]')");
 }
 if ($all==true OR $fs_noparse==1) {
-  $buttons .= create_textarea_button('nofscode.gif', 'N', 'Nicht umzuwandelnden Bereich einfügen', "insert('$name', '[nofscode]', '[/nofscode]')");
+  $buttons .= create_textarea_button('nofscode.gif', 'N', 'Nicht umzuwandelnden Bereich einfï¿½gen', "insert('$name', '[nofscode]', '[/nofscode]')");
 }
 
     // Get Template
@@ -908,7 +908,7 @@ function point_number ($zahl)
 }
 
 /////////////////////////////////////////
-// String kürzen ohne Wort zuzerstören //  <= BAD FUNCTION HAS TO BE IMPROVED TODO
+// String kï¿½rzen ohne Wort zuzerstï¿½ren //  <= BAD FUNCTION HAS TO BE IMPROVED TODO
 /////////////////////////////////////////
 function truncate_string ($string, $maxlength, $extension)
 {
@@ -1057,7 +1057,7 @@ function display_news ($news_arr, $html_code, $fs_code, $para_handling)
         $related_links = '';
     }
 
-    // Template lesen und füllen
+    // Template lesen und fï¿½llen
     $template = new template();
     $template->setFile('0_news.tpl');
     $template->load('NEWS_BODY');
@@ -1228,5 +1228,25 @@ function registerVoter($pollid, $voter_ip) {
     } else {
         setcookie('polls_voted', $_COOKIE['polls_voted'].','.$pollid, time()+60*60*24*60);
     }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// Removes all HTML- and FSCode-tags from $text. If $text contains a ":", it and everything before it is stripped, too. ////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function strip_prefix_tags($text)
+{
+	return preg_replace('/.*: /', '', preg_replace('/\[.*?\]/', '', strip_tags($text)));
+}
+
+function strip_nl_tags_menus($text)
+{
+	$lines = explode("\n", preg_replace('#(\r\n)|(<br( /)?>)#i', "\n", $text));
+	for ($i = 0; $i < count($lines); $i++)
+		if (strpos($lines[$i], "|") !== false)
+			$lines[$i] = "";
+		else
+			$lines[$i] = strip_tags($lines[$i]);
+
+	return preg_replace('/\s\s+/', ' ', preg_replace('/\n/', '', implode($lines)));
 }
 ?>
