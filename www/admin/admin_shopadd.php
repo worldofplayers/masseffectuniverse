@@ -7,15 +7,17 @@
 if (isset($_FILES['artikelimg']) && isset($_POST['title']) && isset($_POST['url']) && isset($_POST['preis'])
     && !empty($_POST['title']) && !empty($_POST['url']) && !empty($_POST['preis']))
 {
-    settype($_POST['hot'], 'integer');
+    settype($_POST[hot], "integer");
     $stmt = $FD->sql()->conn()->prepare(
-                'INSERT INTO '.$FD->config('pref')."shop (artikel_name, artikel_url, artikel_text, artikel_preis, artikel_hot)
+        'INSERT INTO '.$FD->config('pref')."shop (artikel_name, artikel_url, artikel_text, artikel_preis, artikel_hot, kategorie, tipp)
                  VALUES (?,
                          ?,
                          ?,
                          ?,
-                         '".$_POST['hot']."');");
-    $stmt->execute(array($_POST['title'], $_POST['url'], $_POST['text'], $_POST['preis']));
+                         '".$_POST['hot']."',
+                         ?,
+                         ?);");
+    $stmt->execute(array($_POST['title'], $_POST['url'], $_POST['text'], $_POST['preis'], $_POST['kat'], $_POST['tipp']));
     $id = $FD->sql()->conn()->lastInsertId();
 
     $messages = array();
@@ -70,6 +72,24 @@ if(true)
                                     <input class="text" name="title" size="51" maxlength="100">
                                 </td>
                             </tr>
+							<tr>
+								<td class="config" valign="top">
+								Kategorie:<br />
+								<font class="small">Kategorie, in der das Produkt gelistet wird.</font>
+								</td>
+								<td class="config" valign="top">
+								<select name="kat"><option value="1">ME1</option><option value="2">ME2</option><option value="3">ME3</option><option value="4">B�cher/Comics</option><option value="5">Merchandise</option></selcet>
+                                </td>
+							</tr>
+							<tr>
+								<td class="config" valign="top">
+								Empfehlung:<br />
+								<font class="small">Angeben, ob das Produkt als Empfehlung dargestellt werden soll.</font>
+								</td>
+								<td class="config" valign="top">
+								<input type="checkbox" name="tipp" value="1" />
+								</td>
+							</tr>
                             <tr>
                                 <td class="config" valign="top">
                                     URL:<br>
