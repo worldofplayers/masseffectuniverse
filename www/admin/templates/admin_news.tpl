@@ -68,7 +68,33 @@
                 <table cellpadding="0" cellspacing="0" width="100%">
                     <tr>
                         <td>
-                            <!--LANG::news_text-->:<br>
+                            Vorschautext eingeben:<br>
+                            <span class="small">
+                                <!--COMMON::html--> <!--COMMON::is--> <!--TEXT::html-->.
+                                <!--COMMON::fscode--> <!--COMMON::is--> <!--TEXT::fs-->.
+                                <!--COMMON::para--> <!--COMMON::is--> <!--TEXT::para-->.
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <!--TEXT::prev_editor-->
+            </td>
+        </tr>
+
+
+        <tr>
+            <td colspan="2">
+
+                <table cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td>
+                            <!--LANG::news_text--> (vollständiger Text inkl. Vorschauteil):<br>
                             <span class="small">
                                 <!--COMMON::html--> <!--COMMON::is--> <!--TEXT::html-->.
                                 <!--COMMON::fscode--> <!--COMMON::is--> <!--TEXT::fs-->.

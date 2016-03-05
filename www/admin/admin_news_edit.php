@@ -393,6 +393,7 @@ if (
 
     isset ( $_POST['news_title'] ) && $_POST['news_title'] != '' &&
     isset ( $_POST['news_text'] ) && $_POST['news_text'] != '' &&
+    isset ( $_POST['news_prev'] ) && $_POST['news_prev'] != '' &&
 
     isset($_POST['d']) && $_POST['d'] != '' && $_POST['d'] > 0 &&
     isset($_POST['m']) && $_POST['m'] != '' && $_POST['m'] > 0 &&

@@ -45,6 +45,7 @@ if (
         !isset($_POST['edit_link']) && !isset($_POST['add_link']) &&
         isset($_POST['news_title']) && $_POST['news_title'] != '' &&
         isset($_POST['news_text']) && $_POST['news_text'] != '' &&
+        isset($_POST['news_prev']) && $_POST['news_prev'] != '' &&
 
         isset($_POST['d']) && $_POST['d'] != '' && $_POST['d'] > 0 &&
         isset($_POST['m']) && $_POST['m'] != '' && $_POST['m'] > 0 &&
@@ -296,6 +297,7 @@ if ( TRUE ) {
     $adminpage->addText('fs', $config_arr['fs']);
     $adminpage->addText('para', $config_arr['para']);
     $adminpage->addText('the_editor', create_editor('news_text', isset($_POST['news_text']) ? $_POST['news_text'] : '', '', '250px', 'full', FALSE));
+    $adminpage->addText('prev_editor', create_editor('news_prev', isset($_POST['news_prev']) ? $_POST['news_prev'] : '', '', '250px', 'full', FALSE));
     $adminpage->addText('link_list', $link_list);
     $adminpage->addText('link_add', $link_add);
 
