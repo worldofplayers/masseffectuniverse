@@ -287,7 +287,20 @@ function get_meta ()
     }
     $keywords = htmlspecialchars(implode(', ', $keyword_arr));
 
+    $noindexlist = array("news_search", "press", "topoderflop", "user_list", "user", "search", "polls", "shop");
+    if (in_array($global_config_arr['goto'], $noindexlist))
+        $robotcontrol = "noindex";
+    else
+        $robotcontrol = "index,follow";
+
+    $global_config_arr['dyn_description_page'] = substr(strip_tags($global_config_arr['dyn_description_page']), 0, 161);
+    if (strlen($global_config_arr['dyn_description_page']) > 160)
+        $global_config_arr['dyn_description_page'] = htmlentities(substr($global_config_arr['dyn_description_page'], 0, strrpos($global_config_arr['dyn_description_page'], " ")));
+    if (strlen($global_config_arr['dyn_description_page']) > 0)
+        $global_config_arr['description'] = $global_config_arr['dyn_description_page'];
+
     $template = '
+    <base href="' . $global_config_arr['virtualhost'] . '" /><!--[if IE]></base><![endif]-->
     <meta name="title" content="'.htmlspecialchars(get_title()).'">
     '.get_meta_author().'
     <meta name="publisher" content="'.htmlspecialchars($FD->config('publisher')).'">
@@ -297,7 +310,7 @@ function get_meta ()
     '.get_meta_abstract().'
     <meta http-equiv="content-language" content="'.htmlspecialchars($FD->config('language')).'">
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <meta name="robots" content="index,follow">
+    <meta name="robots" content="' . $robotcontrol . '">
     <meta name="Revisit-after" content="3 days">
     <meta name="DC.Title" content="'.htmlspecialchars(get_title()).'">
     '.get_meta_author(TRUE).'
@@ -309,6 +322,9 @@ function get_meta ()
     <meta name="keywords" lang="'.htmlspecialchars($FD->config('language')).'" content="'.$keywords.'">
     '.get_canonical().'
     ';
+
+	if (!headers_sent())
+		header("Content-Type: text/html; charset=ISO-8859-1");
 
     return $template;
 }
@@ -826,7 +842,7 @@ function get_seo () {
 
     global $FD;
 
-    // Anzahl der mittel ? übergegebenen Parameter speichern
+    // Anzahl der mittel ? ï¿½bergegebenen Parameter speichern
     if (isset($_GET))
         $numparams = count($_GET);
     else
@@ -874,7 +890,7 @@ function get_seo () {
                     $seoparams[$i] = str_replace("\x1", '-', $seoparams[$i]);
 
                 // Die Anzahl der mit "-" getrennten Werte muss gerade sein, sonst Weiterleitung
-                // letzer paramter hat keinen wert, strich am ende fällt weg
+                // letzer paramter hat keinen wert, strich am ende fï¿½llt weg
                 if ((count($seoparams) % 2 != 0) && (count($seoparams) > 0)) {
                     //$redirect = true;
                     array_push($seoparams, null);

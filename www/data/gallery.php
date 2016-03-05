@@ -71,6 +71,7 @@ if (isset($_GET['catid']))
         {
             $zaehler = 0;
             $index = $FD->sql()->conn()->query('SELECT * FROM '.$FD->config('pref')."wallpaper WHERE cat_id = $cat_arr[cat_id] ORDER BY wallpaper_id $config_arr[wp_sort] LIMIT $config_arr[page_start],$config_arr[pics_per_page]");
+            $actual_number_of_screens = $index->rowCount();
             while ($wp_arr = $index->fetch(PDO::FETCH_ASSOC))
             {
                 $wp_arr['thumb_url'] = image_url('images/wallpaper/', $wp_arr['wallpaper_name'].'_s');
@@ -133,7 +134,7 @@ if (isset($_GET['catid']))
         {
             $zaehler = 0;
             $index = $FD->sql()->conn()->query('SELECT * FROM '.$FD->config('pref')."screen WHERE cat_id = $cat_arr[cat_id] ORDER by screen_id $config_arr[screen_sort] LIMIT $config_arr[page_start],$config_arr[pics_per_page]");
-
+            $actual_number_of_screens = $index->rowCount();
             $pics = '';
             while ($screen_arr = $index->fetch(PDO::FETCH_ASSOC))
             {
@@ -203,6 +204,9 @@ if (isset($_GET['catid']))
     $template->tag('name', $cat_arr['cat_name'] );
     $template->tag('screenshots', $pics );
     $template->tag('page_nav', $pagenav );
+
+	$global_config_arr['dyn_title_page'] = stripslashes ( $cat_arr[cat_name] . " Seite " . $_GET['page'] );
+	$global_config_arr['dyn_description_page'] = 'Screenshots aus dem Bereich ' . stripslashes ( $cat_arr[cat_name] ) . ' Nummer ' . ($config_arr[page_start]  + 1) . ' bis ' . ($config_arr[page_start] +  $actual_number_of_screens);
 
     $template = $template->display ();
 }

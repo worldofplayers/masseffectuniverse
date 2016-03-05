@@ -108,6 +108,7 @@ if ($show == TRUE) {
                           FROM '.$FD->config('pref')."dl
                           $query dl_open = 1
                           ORDER BY dl_name");
+    $filecount = $index->rowCount();
 
     if ( $num_rows > 0 ) {
         $dateien = '';
@@ -185,5 +186,9 @@ $template = $template->display ();
 
 //Seitentitel
 $FD->setConfig('info', 'page_title', $page_titel);
+
+$global_config_arr['dyn_description_page'] = 'Hier findest du alle Downloads aus dem Bereich ' . $page_titel . '.';
+if ($filecount > 5)
+	$global_config_arr['dyn_description_page'] .= " " . $filecount . ' Downloads warten auf Dich!';
 
 ?>
