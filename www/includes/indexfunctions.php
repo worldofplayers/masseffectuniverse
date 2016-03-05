@@ -519,18 +519,17 @@ function tpl_functions ($TEMPLATE, $COUNT, $filter=array(), $loopend_escape = tr
 
 
     // Set Pattern and Replacment Code
-    $PATTERN = $REPLACEMENT = array();
+    // Replace Functions with computed values
     if (!empty($functions)) {
-        array_push($PATTERN, '/\$('.implode('|', array_keys($functions)).')\((?|(?:"(.*?)")|(.*?))(?:\[(?|(?:"(.*?)")|(.*?))\]){0,1}\)/e');
-        array_push($REPLACEMENT, 'call_tpl_function($functions, $COUNT, array(\'$1\', \'$0\', \'$2\', \'$3\'), $loopend_escape);');
+        $PATTERN = '/\$('.implode('|', array_keys($functions)).')\((?|(?:"(.*?)")|(.*?))(?|\[(?|(?:"(.*?)")|(.*?))\]|()){0,1}\)/';
+        $REPLACEMENT = create_function('$data', 'return call_tpl_function('.var_export($functions, true).', '.var_export($COUNT, true).', array($data[1], $data[0], $data[2], $data[3]), '.var_export($loopend_escape, true).');');
+        $TEMPLATE = preg_replace_callback($PATTERN, $REPLACEMENT, $TEMPLATE);
     }
     if (!empty($snippet_functions)) {
-        array_push($PATTERN, '/\[%(.*?)%\]/e');
-        array_push($REPLACEMENT, 'call_tpl_function($snippet_functions, $COUNT, array("SNP", "$0", "$1", ""), $loopend_escape);');
+        $PATTERN = '/\[%(.*?)%\]/';
+        $REPLACEMENT = create_function('$data', 'return call_tpl_function('.var_export($snippet_functions, true).', '.var_export($COUNT, true).', array("SNP", $data[0], $data[1], ""), '.var_export($loopend_escape, true).');');
+        $TEMPLATE = preg_replace_callback($PATTERN, $REPLACEMENT, $TEMPLATE);
     }
-
-    // Replace Functions with computed values
-    $TEMPLATE = preg_replace($PATTERN, $REPLACEMENT, $TEMPLATE);
 
     return $TEMPLATE;
 }
@@ -1251,82 +1250,6 @@ function copyright ()
     }
 }
 
-
-// CACHING
-function cache_output_template($text)
-{
-    // Direkt als gzip-encoded speichern
-    $size = strlen($text);
-    $crc = crc32($text);
-
-    $gziptext = "\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff";
-    $gziptext .= substr(gzcompress($text), 2, -4);
-    $gziptext .= pack('V', $crc);
-    $gziptext .= pack('V', $size);
-
-    apc_store($_SERVER["HTTP_HOST"] . '_startseite', $gziptext);
-}
-
-// Nur die Startseite und nur bei Gaesten cachen, d.h. es darf maximal die Session-ID als Parameter gesetzt sein
-$docaching = false;
-$cacheoutput = false;
-
-if ((count($_REQUEST) == 0) || ((count($_REQUEST) == 1) && (isset($_REQUEST[ini_get('session.name')]))))
-{
-    // Session muss au�erdem leer sein
-    session_start();
-    if (count($_SESSION) == 0)
-        $docaching = true;
-}
-
-// Caching ist moeglich
-if ($docaching)
-{
-    // Cache ist gzip-encoded, daher muss dies der Client auch akzeptieren koennen
-    if (strpos(' ' . $_SERVER['HTTP_ACCEPT_ENCODING'], 'x-gzip') !== false)
-        $encoding = 'x-gzip';
-    elseif (strpos(' ' . $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false)
-        $encoding = 'gzip';
-    else
-        $encoding = '';
-
-    if ($encoding != '')
-    {
-        $cachetext = apc_fetch($_SERVER["HTTP_HOST"] . '_startseite');
-
-        // Gibt es einen Cache?
-        if ($cachetext != '')
-        {
-            // Das FS2 muss dennoch im Hintergrund weiterlaufen
-            ignore_user_abort(1);
-            @set_time_limit(0);
-
-            header("Content-Encoding: " . $encoding);
-
-            // Hindurch weiss der Browser, dass keine weiteren Daten mehr kommen, obwohl der Skript nicht weiterlaeuft
-            header("Content-Length: " . strlen($cachetext));
-            header('Connection: Close');
-
-            // Kein Caching durch den Browser
-            header('Expires: Thu, 19 Nov 1981 08:53:00 GMT');
-            header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-            header('Pragma: no-cache');
-            header('Vary: Accept-Encoding');
-            header('Content-Type: text/html; charset=ISO-8859-1');
-
-            // Daten sind schon gzip-encoded, nicht noch einmal durch mod_deflate verarbeiten lassen
-            apache_setenv('no-gzip', '1');
-            echo $cachetext;
-            $cacheoutput = true;
-        }
-
-        unset($cachetext);
-    }
-
-    unset($encoding);
-}
-
-
 // Zonen
 
 function checkZonecheckZone($kind, $catid)
@@ -1357,6 +1280,78 @@ function checkZonecheckZone($kind, $catid)
         else
             header('Location: http://' . $_SERVER['HTTP_HOST'] . '/' . $redirurl, true, 301);
     }
+}
+
+// CACHING
+function cache_output_template($text)
+{
+    // Direkt als gzip-encoded speichern
+    $size = strlen($text);
+    $crc = crc32($text);
+
+    $gziptext = "\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff";
+    $gziptext .= substr(gzcompress($text), 2, -4);
+    $gziptext .= pack('V', $crc);
+    $gziptext .= pack('V', $size);
+
+    apc_store($_SERVER["HTTP_HOST"] . '_startseite', $gziptext);
+}
+
+function get_cache()
+{
+    // Nur die Startseite und nur bei Gaesten cachen, d.h. es darf maximal die Session-ID als Parameter gesetzt sein
+    $docaching = false;
+    $cacheoutput = false;
+
+    if ((count($_REQUEST) == 0) || ((count($_REQUEST) == 1) && (isset($_REQUEST[ini_get('session.name')])))) {
+        // Session muss au�erdem leer sein
+        if (count($_SESSION) == 0)
+            $docaching = true;
+    }
+
+    // Caching ist moeglich
+    if ($docaching) {
+        // Cache ist gzip-encoded, daher muss dies der Client auch akzeptieren koennen
+        if (strpos(' ' . $_SERVER['HTTP_ACCEPT_ENCODING'], 'x-gzip') !== false)
+            $encoding = 'x-gzip';
+        elseif (strpos(' ' . $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false)
+            $encoding = 'gzip';
+        else
+            $encoding = '';
+
+        if ($encoding != '') {
+            $cachetext = apc_fetch($_SERVER["HTTP_HOST"] . '_startseite');
+
+            // Gibt es einen Cache?
+            if ($cachetext != '') {
+                // Das FS2 muss dennoch im Hintergrund weiterlaufen
+                ignore_user_abort(1);
+                @set_time_limit(0);
+
+                header("Content-Encoding: " . $encoding);
+
+                // Hindurch weiss der Browser, dass keine weiteren Daten mehr kommen, obwohl der Skript noch weiterlaeuft
+                header("Content-Length: " . strlen($cachetext));
+                header('Connection: Close');
+
+                // Kein Caching durch den Browser
+                header('Expires: Thu, 19 Nov 1981 08:53:00 GMT');
+                header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+                header('Pragma: no-cache');
+                header('Vary: Accept-Encoding');
+                header('Content-Type: text/html; charset=ISO-8859-1');
+
+                // Daten sind schon gzip-encoded, nicht noch einmal durch mod_deflate verarbeiten lassen
+                apache_setenv('no-gzip', '1');
+                return $cachetext;
+            }
+
+            unset($cachetext);
+        }
+
+        unset($encoding);
+    }
+    return null;
 }
 
 ?>

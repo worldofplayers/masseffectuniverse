@@ -17,6 +17,12 @@ require_once(FS2_ROOT_PATH . 'includes/imagefunctions.php');
 require_once(FS2_ROOT_PATH . 'includes/indexfunctions.php');
 include_once(FS2_ROOT_PATH . 'includes/fscode.php');
 
+// cache
+$cacheoutput = get_cache();
+if (!is_null($cacheoutput)) {
+    echo $cacheoutput;
+}
+
 // Constructor Calls
 // TODO: "Constructor Hook"
 get_goto();
@@ -45,14 +51,13 @@ $template_general = (string) $theTemplate;
 // Display Page
 $template =  tpl_functions_init(get_maintemplate($template_general));
 
-// Caching
-if (!$cacheoutput)
+// No Caching
+if (is_null($cacheoutput)) {
     echo $template;
-
-// Bei Bedarf Endergebnis cachen
-if ($docaching)
+} else {
+    // Save request to cache
     cache_output_template($template);
-
+}
 
 // Shutdown System
 // TODO: "Shutdown Hook"

@@ -134,6 +134,8 @@ define('ACP_GO', $go);
 ##########################
 ### START OF HTML HEAD ###
 ##########################
+if (!headers_sent())
+    header("Content-Type: text/html; charset=ISO-8859-1");
 ob_start();
 echo'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
