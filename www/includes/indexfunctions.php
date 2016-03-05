@@ -1325,4 +1325,38 @@ if ($docaching)
 
     unset($encoding);
 }
+
+
+// Zonen
+
+function checkZonecheckZone($kind, $catid)
+{
+    global $seozones, $seozonename, $seozonefile;
+
+    if ($seozonename == "")
+        return;
+
+    // Zu welcher Zone gehoert die Kategorie?
+    $zonename = "";
+    foreach ($seozones as $name => $seozone)
+        if (in_array($catid, $seozone[$kind]))
+            $zonename = $name;
+
+    // Sind wir in der richtigen Zone? Wenn nicht, weiterleiten
+    if ($zonename != $seozonename)
+    {
+        if ($zonename != "")
+            $redirurl = $zonename . "/";
+        else
+            $redirurl = "";
+
+        $redirurl .= $seozonefile . ".html";
+
+        if ($_SERVER["HTTPS"] == 'on')
+            header('Location: https://' . $_SERVER['HTTP_HOST'] . '/' . $redirurl, true, 301);
+        else
+            header('Location: http://' . $_SERVER['HTTP_HOST'] . '/' . $redirurl, true, 301);
+    }
+}
+
 ?>

@@ -25,6 +25,8 @@ if (isset($_GET['catid']))
 {
     settype($_GET['catid'], 'integer');
 
+    checkZone("screen", $_GET[catid]);
+
     //config_arr
     $FD->loadConfig('screens');
     $config_arr = $FD->configObject('screens')->getConfigArray();

@@ -46,6 +46,8 @@ else {
         $FD->setConfig('main', 'goto', $article_arr['article_url']);
     }
 
+    checkZone("articles", $article_arr['article_cat_id']);
+
     // Security Functions
     settype ( $article_arr['article_user'], 'integer' );
 
