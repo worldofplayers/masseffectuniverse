@@ -19,6 +19,8 @@ if (isset($_GET[catid]))
 if (isset($_GET[catid]))
 {
     settype($_GET[catid], 'integer');
+	
+	checkZone("screen", $_GET[catid]);
 
     //config_arr
     $index = mysql_query("SELECT * FROM ".$global_config_arr[pref]."screen_config", $db);

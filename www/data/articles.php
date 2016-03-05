@@ -26,6 +26,8 @@ else
 {
     // Get Aricle Data
     $article_arr = mysql_fetch_assoc ( $index );
+	
+	checkZone("articles", $article_arr['article_cat_id']);
 
     // Security Functions
     settype ( $article_arr['article_user'], "integer" );

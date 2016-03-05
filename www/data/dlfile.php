@@ -22,6 +22,8 @@ $index = mysql_query("select * from ".$global_config_arr[pref]."dl where dl_id =
 if (mysql_num_rows($index) > 0)
 {
     $dl_arr = mysql_fetch_assoc($index);
+	
+	checkZone("dl", $dl_arr['cat_id']);
 
     //Seitentitel
     $global_config_arr['dyn_title_page'] = stripslashes ( $dl_arr['dl_name'] );

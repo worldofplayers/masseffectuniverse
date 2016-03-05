@@ -644,7 +644,7 @@ function delete_old_randoms ()
   global $global_config_arr;
 
   if ($global_config_arr[random_timed_deltime] != -1) {
-    // Alte Zufallsbild-Einträge aus der Datenbank entfernen
+    // Alte Zufallsbild-Eintrï¿½ge aus der Datenbank entfernen
     mysql_query("DELETE a
                 FROM ".$global_config_arr[pref]."screen_random a, ".$global_config_arr[pref]."global_config b
                 WHERE a.end < UNIX_TIMESTAMP()-b.random_timed_deltime", $db);
@@ -726,4 +726,38 @@ function copyright ()
         }
     }
 }
+
+
+// Zonen
+
+function checkZonecheckZone($kind, $catid)
+{
+    global $seozones, $seozonename, $seozonefile;
+
+    if ($seozonename == "")
+        return;
+
+    // Zu welcher Zone gehoert die Kategorie?
+    $zonename = "";
+    foreach ($seozones as $name => $seozone)
+        if (in_array($catid, $seozone[$kind]))
+            $zonename = $name;
+
+    // Sind wir in der richtigen Zone? Wenn nicht, weiterleiten
+    if ($zonename != $seozonename)
+    {
+        if ($zonename != "")
+            $redirurl = $zonename . "/";
+        else
+            $redirurl = "";
+
+        $redirurl .= $seozonefile . ".html";
+
+        if ($_SERVER["HTTPS"] == 'on')
+            header('Location: https://' . $_SERVER['HTTP_HOST'] . '/' . $redirurl, true, 301);
+        else
+            header('Location: http://' . $_SERVER['HTTP_HOST'] . '/' . $redirurl, true, 301);
+    }
+}
+
 ?>
