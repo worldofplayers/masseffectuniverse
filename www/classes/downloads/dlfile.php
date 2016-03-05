@@ -15,6 +15,8 @@ $index = $FD->sql()->conn()->query('SELECT * FROM '.$FD->config('pref')."dl WHER
 $dl_arr = $index->fetch(PDO::FETCH_ASSOC);
 if ($dl_arr !== false)
 {
+    checkZone("dl", $dl_arr['cat_id']);
+
     //Seitentitel
     $FD->setConfig('info', 'page_title', $dl_arr['dl_name'] );
 
