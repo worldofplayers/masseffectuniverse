@@ -43,7 +43,15 @@ $template_general = (string) $theTemplate;
 // TODO: "Template Manipulation Hook"
 
 // Display Page
-echo tpl_functions_init(get_maintemplate($template_general));
+$template =  tpl_functions_init(get_maintemplate($template_general));
+
+// Caching
+if (!$cacheoutput)
+    echo $template;
+
+// Bei Bedarf Endergebnis cachen
+if ($docaching)
+    cache_output_template($template);
 
 
 // Shutdown System
