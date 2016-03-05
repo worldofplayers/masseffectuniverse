@@ -123,16 +123,25 @@ if ($dl_arr !== false)
             $template->tag('mirror_ext', $mirror_template );
             $template->tag('mirror_col', $mirror_col );
 
+            $filelist .= stripslashes ( $file_arr['file_name'] ) . " (" . $file_arr['file_size'] . "), ";
+
             $template = $template->display ();
             $files .= $template;
         }
     }
+
+    $filelist = substr($filelist, 0, strlen($filelist) - 2);
 
     // Stats erstellen
     $stats_arr['number'] = ( $stats_arr['number'] == 1 ) ? $stats_arr['number'].' '.$FD->text('frontend', 'download_file') : $stats_arr['number'].' '.$FD->text('frontend', 'download_files');
     $stats_arr['traffic'] = getsize($stats_arr['traffic']);
     $stats_arr['size'] = getsize($stats_arr['size']);
 
+    if ($stats_arr['number'] == 1) {
+        $global_config_arr['dyn_description_page'] = 'Download der Datei ' . $filelist . ' aus dem Bereich ' . $dl_arr['cat_name'] . ': ' . strip_nl_tags_menus($dl_arr['dl_text']);
+    } else {
+        $global_config_arr['dyn_description_page'] = 'Download der Dateien ' . $filelist . ' aus dem Bereich ' . $dl_arr['cat_name'] . ': ' . strip_nl_tags_menus($dl_arr['dl_text']);
+    }
 
     // Get Template
     $template = new template();
