@@ -72,7 +72,7 @@ $settings = (object) $settings;
             'html', 'nohtml'
         ), array(), array(
             'img', 'cimg',
-            'video',
+            'video', 'linie'
         ));
 
         $text = preg_replace("/[\n\r]/", '', $text);

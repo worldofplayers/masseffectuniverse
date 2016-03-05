@@ -36,7 +36,7 @@ function get_all_fscodes() {
         'url', 'home', 'email',
         'img', 'cimg',
         'list', 'numlist',
-        'code', 'quote', 'video',
+        'code', 'quote', 'video', 'linie',
         'nofscode', 'fscode',
         'smilies',
         'html', 'nohtml',
@@ -418,6 +418,16 @@ function parse_fscode($TEXT, $flags = array(), $to_html = array(), $to_text = ar
             $fscode->setCodeFlag ('video', 'paragraph_type', BBCODE_PARAGRAPH_BLOCK_ELEMENT);
             $fscode->setCodeFlag ('player', 'paragraph_type', BBCODE_PARAGRAPH_BLOCK_ELEMENT);
         }
+
+        // linie
+        if (in_array('linie', $to_html)) {
+            $fscode->addCode ('linie', 'simple_replace_single', null, array ('start_tag' => '<img src="images/content/Trennlinie.png" />'),
+                'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+        } elseif (in_array('linie', $to_text)) {
+            $fscode->addCode ('linie', 'simple_replace_single', null, array ('start_tag' => '------------------------------'),
+                'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+        }
+
 
     // FSCode Tag
     } elseif (!$flags['nofscodeatall']) {
