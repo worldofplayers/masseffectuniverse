@@ -136,12 +136,12 @@ function get_maintemplate ($BODY, $PATH_PREFIX = '', $BASE = FALSE)
     // Base for Images
     $template_base = ($BASE !== FALSE) ? '<base href="'.$BASE .'">' : '';
 
-	// Get Titel
-	$template_title = get_title();
+    // Get Titel
+    $template_title = get_title();
 
     // Create Link-Lines
     $template_favicon = ($FD->config('show_favicon') == 1) ? '<link rel="shortcut icon" href="'.$PATH_PREFIX .'styles/'.$FD->config('style').'/icons/favicon.ico">' : '';
-	$template_feed = '<link rel="alternate" type="application/rss+xml" href="'.$PATH_PREFIX .'feeds/'.$FD->config('feed').'.php" title="'.$FD->config('title').' '.$FD->text('frontend', 'news_feed').'">';
+    $template_feed = '<link rel="alternate" type="application/rss+xml" href="'.$PATH_PREFIX .'feeds/'.$FD->config('feed').'.php" title="'.$FD->config('title').' '.$FD->text('frontend', 'news_feed').'">';
 
     // Create Script-Lines
     $template_javascript = get_js($PATH_PREFIX).'
@@ -208,7 +208,7 @@ function get_css ($PATH_PREFIX)
     // Search for import.css
     if ( in_array ( 'import.css', $files ) ) {
         $template_css .= '<link rel="stylesheet" type="text/css" href="'. $link_path .'/import.css">';
-    // Else import other CSS-Files
+        // Else import other CSS-Files
     } else {
         foreach ($files_without_special as $file) {
             $template_css .= '
@@ -300,7 +300,7 @@ function get_meta ()
         $global_config_arr['description'] = $global_config_arr['dyn_description_page'];
 
     $template = '
-    <base href="' . $global_config_arr['virtualhost'] . '" /><!--[if IE]></base><![endif]-->
+    <base href="' . $FD->config('virtualhost') . '" /><!--[if IE]></base><![endif]-->
     <meta name="title" content="'.htmlspecialchars(get_title()).'">
     '.get_meta_author().'
     <meta name="publisher" content="'.htmlspecialchars($FD->config('publisher')).'">
@@ -323,8 +323,8 @@ function get_meta ()
     '.get_canonical().'
     ';
 
-	if (!headers_sent())
-		header("Content-Type: text/html; charset=ISO-8859-1");
+    if (!headers_sent())
+        header("Content-Type: text/html; charset=ISO-8859-1");
 
     return $template;
 }
@@ -385,7 +385,7 @@ function get_meta_abstract ()
 /////////////////////////////////////
 function get_canonical() {
     $url = get_canonical_url();
-	if (!empty($url)) {
+    if (!empty($url)) {
         return '<link rel="canonical" href="'.$url.'">';
     }
 }
@@ -393,13 +393,13 @@ function get_canonical() {
 function get_canonical_url() {
     global $FD;
 
-	// Check for homepage and in case don't use any paramter (including go) at all
+    // Check for homepage and in case don't use any paramter (including go) at all
     $goto = $FD->cfg('goto');
-	if ($goto == $FD->cfg('home_real'))
-		$goto = '';
+    if ($goto == $FD->cfg('home_real'))
+        $goto = '';
 
     // get canoncial parameters
-	if (!is_null($canonparams = $FD->info('canonical'))) {
+    if (!is_null($canonparams = $FD->info('canonical'))) {
         $activeparams = array();
 
         if (count($canonparams) > 0) {
@@ -438,31 +438,31 @@ function get_content ($GOTO)
         include(FS2_ROOT_PATH . 'data/'.$GOTO );
     } else {
 
-    // Articles from DB
-    $stmt = $FD->sql()->conn()->prepare(
-                  'SELECT COUNT(article_id) FROM '.$FD->config('pref').'articles
+        // Articles from DB
+        $stmt = $FD->sql()->conn()->prepare(
+            'SELECT COUNT(article_id) FROM '.$FD->config('pref').'articles
                    WHERE `article_url` = ? LIMIT 0,1');
-    $stmt->execute(array($GOTO));
-    $num = $stmt->fetchColumn();
-    if ($num >= 1) {
+        $stmt->execute(array($GOTO));
+        $num = $stmt->fetchColumn();
+        if ($num >= 1) {
 
-        // Forward Aliases
-        $alias = $FD->sql()->conn()->query(
-                      'SELECT alias_forward_to FROM '.$FD->config('pref')."aliases
+            // Forward Aliases
+            $alias = $FD->sql()->conn()->query(
+                'SELECT alias_forward_to FROM '.$FD->config('pref')."aliases
                        WHERE `alias_active` = 1 AND `alias_go` = 'articles.php'");
-        $alias = $alias->fetch(PDO::FETCH_ASSOC);
-        if (!empty($alias)) {
-            $FD->setConfig('env', 'goto', $alias['alias_forward_to']);
-            include(FS2_ROOT_PATH . 'data/' . $alias['alias_forward_to']);
-        } else {
-            $FD->setConfig('env', 'goto', 'articles');
-            include(FS2_ROOT_PATH . 'data/articles.php');
-        }
+            $alias = $alias->fetch(PDO::FETCH_ASSOC);
+            if (!empty($alias)) {
+                $FD->setConfig('env', 'goto', $alias['alias_forward_to']);
+                include(FS2_ROOT_PATH . 'data/' . $alias['alias_forward_to']);
+            } else {
+                $FD->setConfig('env', 'goto', 'articles');
+                include(FS2_ROOT_PATH . 'data/articles.php');
+            }
 
-        // File-Download
+            // File-Download
         } elseif ($GOTO == 'dl' && isset ($_GET['fileid']) && isset ($_GET['dl'])) {
 
-        // 404-Error Page, no content found
+            // 404-Error Page, no content found
         } else {
             $FD->setConfig('goto', '404');
             $FD->setConfig('env', 'goto', '404');
@@ -613,7 +613,7 @@ function load_applets()
 
     // Load Applets from DB
     $applet_data = $FD->sql()->conn()->query(
-                       'SELECT applet_include, applet_file, applet_output
+        'SELECT applet_include, applet_file, applet_output
                         FROM '.$FD->config('pref').'applets
                         WHERE `applet_active` = 1');
     $applet_data = $applet_data->fetchAll(PDO::FETCH_ASSOC);
@@ -643,7 +643,7 @@ function load_applets()
 //////////////////////
 function load_an_applet($file, $output, $args)
 {
-	global $FD;
+    global $FD;
     // Setup $SCRIPT Var
     unset($SCRIPT, $template);
     $SCRIPT['argc'] = array_unshift($args, $file);
@@ -662,7 +662,7 @@ function load_an_applet($file, $output, $args)
 
     // set empty str
     if (!isset($template)) {
-		initstr($template);
+        initstr($template);
     }
 
     //create return value
@@ -684,7 +684,7 @@ function tpl_func_snippets($original, $main_argument, $other_arguments)
     if (!isset($SNP[$main_argument])) {
         // Get Snippet and write into Array
         $data = $sql->conn()->prepare(
-                    'SELECT snippet_tag, snippet_text FROM '.$sql->getPrefix().'snippets
+            'SELECT snippet_tag, snippet_text FROM '.$sql->getPrefix().'snippets
                      WHERE `snippet_tag` = ? AND `snippet_active` = 1 LIMIT 1');
         $data->execute(array($original));
         $data = $data->fetch(PDO::FETCH_ASSOC);
@@ -948,8 +948,8 @@ function get_seo () {
 
     // Hotlinkingschutz vom FS2 zufrieden stellen
     if (isset($_SERVER['HTTP_REFERER']))
-      if (preg_match('/\/dlfile--.*\.html$/', $_SERVER['HTTP_REFERER']))
-          $_SERVER['HTTP_REFERER'] .= '?go=dlfile';
+        if (preg_match('/\/dlfile--.*\.html$/', $_SERVER['HTTP_REFERER']))
+            $_SERVER['HTTP_REFERER'] .= '?go=dlfile';
 }
 
 
@@ -990,7 +990,7 @@ function forward_aliases ( $GOTO )
     global $FD;
 
     $aliases = $FD->sql()->conn()->prepare(
-                     'SELECT alias_go, alias_forward_to FROM '.$FD->config('pref').'aliases
+        'SELECT alias_go, alias_forward_to FROM '.$FD->config('pref').'aliases
                       WHERE `alias_active` = 1 AND `alias_go` = ?');
     $aliases->execute(array($GOTO));
     $aliases = $aliases->fetchAll(PDO::FETCH_ASSOC);
@@ -1137,26 +1137,26 @@ function save_referer ()
 {
     global $FD;
 
-	if (isset($_SERVER['HTTP_REFERER'])) {
+    if (isset($_SERVER['HTTP_REFERER'])) {
 
-		$time = time(); // timestamp
-		// save referer
-		$referer = preg_replace ( "=(.*?)\=([0-9a-z]{32})(.*?)=i", "\\1=\\3", $_SERVER['HTTP_REFERER'] );
-		$index = $FD->sql()->conn()->prepare ( 'SELECT * FROM '.$FD->config('pref').'counter_ref WHERE ref_url = ?' );
-		$index->execute(array($referer));
+        $time = time(); // timestamp
+        // save referer
+        $referer = preg_replace ( "=(.*?)\=([0-9a-z]{32})(.*?)=i", "\\1=\\3", $_SERVER['HTTP_REFERER'] );
+        $index = $FD->sql()->conn()->prepare ( 'SELECT * FROM '.$FD->config('pref').'counter_ref WHERE ref_url = ?' );
+        $index->execute(array($referer));
 
-		if ( $index->fetch(PDO::FETCH_ASSOC) === false ) {
-			if ( substr_count ( $referer, 'http://' ) >= 1 && substr_count ( $referer, $FD->config('virtualhost') ) < 1 ) {
-				$stmt = $FD->sql()->conn()->prepare ( 'INSERT INTO '.$FD->config('pref')."counter_ref (ref_url, ref_count, ref_first, ref_last) VALUES (?, '1', '".$time."', '".$time."')" );
-				$stmt->execute(array($referer));
-			}
-		} else {
-			if ( substr_count ( $referer, 'http://' ) >= 1 && substr_count ( $referer, $FD->config('virtualhost') ) < 1 ) {
-				$stmt = $FD->sql()->conn()->prepare ( 'UPDATE '.$FD->config('pref')."counter_ref SET ref_count = ref_count + 1, ref_last = '".$time."' WHERE ref_url = ? LIMIT 1" );
-				$stmt->execute(array($referer));
-			}
-		}
-	}
+        if ( $index->fetch(PDO::FETCH_ASSOC) === false ) {
+            if ( substr_count ( $referer, 'http://' ) >= 1 && substr_count ( $referer, $FD->config('virtualhost') ) < 1 ) {
+                $stmt = $FD->sql()->conn()->prepare ( 'INSERT INTO '.$FD->config('pref')."counter_ref (ref_url, ref_count, ref_first, ref_last) VALUES (?, '1', '".$time."', '".$time."')" );
+                $stmt->execute(array($referer));
+            }
+        } else {
+            if ( substr_count ( $referer, 'http://' ) >= 1 && substr_count ( $referer, $FD->config('virtualhost') ) < 1 ) {
+                $stmt = $FD->sql()->conn()->prepare ( 'UPDATE '.$FD->config('pref')."counter_ref SET ref_count = ref_count + 1, ref_last = '".$time."' WHERE ref_url = ? LIMIT 1" );
+                $stmt->execute(array($referer));
+            }
+        }
+    }
 }
 
 
@@ -1180,7 +1180,7 @@ function clean_timed_preview_images () {
 ///////////////////////////////
 function get_copyright ()
 {
-        return '<span class="copyright">Powered by <a class="copyright" href="http://www.frogsystem.de/" target="_blank">Frogsystem&nbsp;2</a> &copy; 2007 - 2014 Frogsystem-Team</span>';
+    return '<span class="copyright">Powered by <a class="copyright" href="http://www.frogsystem.de/" target="_blank">Frogsystem&nbsp;2</a> &copy; 2007 - 2014 Frogsystem-Team</span>';
 }
 
 
