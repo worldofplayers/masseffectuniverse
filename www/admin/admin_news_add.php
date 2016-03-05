@@ -8,6 +8,7 @@ if (
         isset ( $_POST['addnews'] ) &&
         $_POST['title'] && $_POST['title'] != "" &&
         $_POST['news_text'] && $_POST['news_text'] != "" &&
+		$_POST['news_prev'] && $_POST['news_prev'] != "" &&
 
         $_POST['d'] && $_POST['d'] != "" && $_POST['d'] > 0 &&
         $_POST['m'] && $_POST['m'] != "" && $_POST['m'] > 0 &&
@@ -20,6 +21,7 @@ if (
     )
 {
     $_POST['news_text'] = savesql ( $_POST['news_text'] );
+	$_POST['news_prev'] = savesql ( $_POST['news_prev'] );
     $_POST['title'] = savesql ( $_POST['title'] );
     
     settype ( $_POST['cat_id'], "integer" );
@@ -34,7 +36,7 @@ if (
     // MySQL-Insert-Query
     mysql_query ("
                     INSERT INTO ".$global_config_arr['pref']."news
-                            (cat_id, user_id, news_date, news_title, news_text, news_active, news_comments_allowed, news_search_update)
+                            (cat_id, user_id, news_date, news_title, news_text, news_active, news_comments_allowed, news_search_update, news_prev)
                     VALUES (
                             '".$_POST['cat_id']."',
                             '".$_POST['posterid']."',
@@ -43,7 +45,8 @@ if (
                             '".$_POST['news_text']."',
                             '".$_POST['news_active']."',
                             '".$_POST['news_comments_allowed']."',
-                            '".time()."'
+                            '".time()."',
+							'".$_POST['news_prev']."'
                     )
     ", $db );
     $newsid = mysql_insert_id ();
@@ -111,11 +114,12 @@ if ( TRUE )
 
         // Security-Functions
         $_POST['news_text'] = killhtml ( $_POST['news_text'] );
-    $_POST['title'] = killhtml ( $_POST['title'] );
+		$_POST['news_prev'] = killhtml ( $_POST['news_prev'] );
+		$_POST['title'] = killhtml ( $_POST['title'] );
         settype ( $_POST['cat_id'], "integer" );
-    settype ( $_POST['posterid'], "integer" );
+		settype ( $_POST['posterid'], "integer" );
         settype ( $_POST['news_active'], "integer" );
-    settype ( $_POST['news_comments_allowed'], "integer" );
+		settype ( $_POST['news_comments_allowed'], "integer" );
     
     // Get User
     $index = mysql_query ( "SELECT user_name, user_id FROM ".$global_config_arr['pref']."user WHERE user_id = '".$_POST['posterid']."'", $db );
@@ -198,26 +202,54 @@ if ( TRUE )
                                     <input class="text" size="75" maxlength="255" id="news_title" name="title" value="'.$_POST['title'].'"><br><br>
                                 </td>
                             </tr>
-                            <tr>
+							
+							<!-- -->
+							
+							<tr>
                                 <td class="config" colspan="2">
                                 
                                     <table cellpadding="0" cellspacing="0" width="100%">
                                         <tr>
                                                                                         <td class="config top">
-                                                '.$admin_phrases[news][news_text].':<br>
+                                                Vorschautext eingeben:<br>
                                                                                                 <span class="small">'.
                                                                                                 $admin_phrases[common][html].' '.$config_arr[html_code].'. '.
                                                                                                 $admin_phrases[common][fscode].' '.$config_arr[fs_code].'. '.
                                                                                                 $admin_phrases[common][para].' '.$config_arr[para_handling].'.</span>
                                                                                         </td>
-                                                                                        <td class="config right bottom">
+                                        </tr>
+                                    </table>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="config" colspan="2">
+                                    '.create_editor ( "news_prev", $_POST['news_prev'], "100%", "250px", "", FALSE).'
+                                </td>
+                            </tr>
+							
+							<!-- -->
+							
+                            <tr>
+                                <td class="config" colspan="2">
+                                
+                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                        <tr>
+                                            <td class="config top">
+                                                '.$admin_phrases[news][news_text].'(vollständiger Text inkl. Vorschauteil):<br>
+                                                                                                <span class="small">'.
+                                                                                                $admin_phrases[common][html].' '.$config_arr[html_code].'. '.
+                                                                                                $admin_phrases[common][fscode].' '.$config_arr[fs_code].'. '.
+                                                                                                $admin_phrases[common][para].' '.$config_arr[para_handling].'.</span>
+                                            </td>
+                                            <td class="config right bottom">
                                                                                             <input class="pointer middle" type="checkbox" name="news_active" value="1" '.getchecked ( $_POST['news_active'], 1 ).'>
                                                                                             <span class="small middle">'.$admin_phrases[news][news_active].'</span>&nbsp;&nbsp;
                                                                                             <input class="pointer middle" type="checkbox" name="news_comments_allowed" value="1" '.getchecked ( $_POST['news_comments_allowed'], 1 ).'>
                                                                                             <span class="small middle">'.$admin_phrases[news][news_comments_allowed].'</span>
-                                                                                        </td>
-                                                                                </tr>
-                                                                        </table>
+                                            </td>
+                                        </tr>
+                                    </table>
 
                                 </td>
                             </tr>

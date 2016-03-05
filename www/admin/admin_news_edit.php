@@ -367,6 +367,7 @@ function action_edit_get_data ( $NEWS_ID )
 
         // Security-Functions
         $news_arr['news_text'] = killhtml ( $news_arr['news_text'] );
+		$news_arr['news_prev'] = killhtml ( $news_arr['news_prev'] );
     $news_arr['news_title'] = killhtml ( $news_arr['news_title'] );
         settype ( $news_arr['cat_id'], "integer" );
     settype ( $news_arr['user_id'], "integer" );
@@ -717,13 +718,41 @@ function action_edit_display_page ( $data_arr )
                                     <input class="text" size="75" maxlength="255" id="news_title" name="news_title" value="'.$news_arr['news_title'].'">
                                 </td>
                             </tr>
+							
+							<!-- -->
+							
+							<tr>
+                                <td class="config" colspan="2">
+                                
+                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                        <tr>
+                                                                                        <td class="config top">
+                                                Vorschautext eingeben:<br>
+                                                                                                <span class="small">'.
+                                                                                                $admin_phrases[common][html].' '.$config_arr[html_code].'. '.
+                                                                                                $admin_phrases[common][fscode].' '.$config_arr[fs_code].'. '.
+                                                                                                $admin_phrases[common][para].' '.$config_arr[para_handling].'.</span>
+                                                                                        </td>
+                                        </tr>
+                                    </table>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="config" colspan="2">
+                                    '.create_editor ( "news_prev", $news_arr['news_prev'], "100%", "250px", "", FALSE).'
+                                </td>
+                            </tr>
+							
+							<!-- -->
+							
                             <tr>
                                 <td class="config" colspan="2">
                                                                         
                                     <table cellpadding="0" cellspacing="0" width="100%">
                                         <tr>
                                                                                         <td class="config top">
-                                                '.$admin_phrases[news][news_text].':<br>
+                                                '.$admin_phrases[news][news_text].'(vollständiger Text inkl. Vorschauteil):<br>
                                                                                                 <span class="small">'.
                                                                                                 $admin_phrases[common][html].' '.$config_arr[html_code].'. '.
                                                                                                 $admin_phrases[common][fscode].' '.$config_arr[fs_code].'. '.
@@ -1115,6 +1144,7 @@ function db_edit_news ( $DATA )
     global $admin_phrases;
     
     $DATA['news_text'] = savesql ( $DATA['news_text'] );
+	$DATA['news_prev'] = savesql ( $DATA['news_prev'] );
     $DATA['news_title'] = savesql ( $DATA['news_title'] );
 
     $DATA['news_id'] = $DATA['news_id'][0];
@@ -1140,7 +1170,8 @@ function db_edit_news ( $DATA )
                             news_text = '".$DATA['news_text']."',
                             news_active = '".$DATA['news_active']."',
                             news_comments_allowed = '".$DATA['news_comments_allowed']."',
-                            news_search_update = '".time()."'
+                            news_search_update = '".time()."',
+							news_prev = '".$DATA['news_prev']."'
                     WHERE
                             news_id = '".$DATA['news_id']."'
     ", $db );
@@ -1300,6 +1331,7 @@ if (
 
                 $_POST['news_title'] && $_POST['news_title'] != "" &&
                 $_POST['news_text'] && $_POST['news_text'] != "" &&
+				$_POST['news_prev'] && $_POST['news_prev'] != "" &&
 
                 $_POST['d'] && $_POST['d'] != "" && $_POST['d'] > 0 &&
                 $_POST['m'] && $_POST['m'] != "" && $_POST['m'] > 0 &&
