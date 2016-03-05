@@ -67,7 +67,7 @@ function mozWrap(txtarea, open, close)
         }
 
         var s1 = (txtarea.value).substring(0,selStart);
-        var s2 = (txtarea.value).substring(selStart, selEnd)
+        var s2 = (txtarea.value).substring(selStart, selEnd);
         var s3 = (txtarea.value).substring(selEnd, selLength);
 
         txtarea.value = s1 + open + s2 + close + s3;
@@ -75,8 +75,6 @@ function mozWrap(txtarea, open, close)
         txtarea.selectionEnd = txtarea.selectionStart;
         txtarea.focus();
         txtarea.scrollTop = scrollTop;
-
-        return;
 }
 
 ///////////////////////////////////////////////
@@ -110,14 +108,14 @@ function htmlspecialchars(str,typ) {
 
 
 //////////////////////////////////////////////////////////////////////////////////////
-//Einfachen Code einfügen (B,I,U, etc.) => Keine Abfrage
+//Einfachen Code einfï¿½gen (B,I,U, etc.) => Keine Abfrage
 //////////////////////////////////////////////////////////////////////////////////////
 function insert(eName, aTag, eTag) {
   var input = document.getElementById(eName);
   input.focus();
-  /* für Internet Explorer */
+  /* fï¿½r Internet Explorer */
   if(typeof document.selection != 'undefined') {
-    /* Einfügen des Formatierungscodes */
+    /* Einfï¿½gen des Formatierungscodes */
     var range = document.selection.createRange();
     var insText = range.text;
     range.text = aTag + insText + eTag;
@@ -130,10 +128,10 @@ function insert(eName, aTag, eTag) {
     }
     range.select();
   }
-  /* für neuere auf Gecko basierende Browser */
+  /* fï¿½r neuere auf Gecko basierende Browser */
   else if(typeof input.selectionStart != 'undefined')
   {
-    /* Anpassen der Cursorposition nach dem einfügen */
+    /* Anpassen der Cursorposition nach dem einfï¿½gen */
     var selection_start = input.selectionStart;
     var selection_end = input.selectionEnd;
     var insText = input.value.substring(selection_start, selection_end);
@@ -143,33 +141,33 @@ function insert(eName, aTag, eTag) {
     } else {
       pos = selection_start + aTag.length + insText.length + eTag.length;
     }
-    mozWrap(input, aTag, eTag)
+    mozWrap(input, aTag, eTag);
     input.selectionStart = pos;
     input.selectionEnd = pos;
   }
-  /* für die übrigen Browser */
+  /* fï¿½r die ï¿½brigen Browser */
   else
   {
-    /* Abfrage der Einfügeposition */
+    /* Abfrage der Einfï¿½geposition */
     var pos = input.value.length;
-    /* Einfügen des Formatierungscodes */
+    /* Einfï¿½gen des Formatierungscodes */
     var insText = prompt("Bitte gib den zu formatierenden Text ein:");
     input.value = input.value.substr(0, pos) + aTag + insText + eTag + input.value.substr(pos);
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////
-//Mittel Komplexen Code einfügen (IMG, CIMG, etc.) => Abfrage bei nicht Markiertem Text
+//Mittel Komplexen Code einfï¿½gen (IMG, CIMG, etc.) => Abfrage bei nicht Markiertem Text
 //////////////////////////////////////////////////////////////////////////////////////
 function insert_mcom(eName, aTag, eTag, Frage, Vorgabe) {
   var input = document.getElementById(eName);
   input.focus();
-  /* für Internet Explorer */
+  /* fï¿½r Internet Explorer */
   if(typeof document.selection != 'undefined') {
-    /* Einfügen des Formatierungscodes */
+    /* Einfï¿½gen des Formatierungscodes */
     var range = document.selection.createRange();
     var insText = range.text;
     if (insText.length == 0) {
-      /* Ermittlung des einzufügenden Textes*/
+      /* Ermittlung des einzufï¿½genden Textes*/
       insText = prompt(Frage, Vorgabe);
       if (insText == null) {
         insText = "";
@@ -185,16 +183,16 @@ function insert_mcom(eName, aTag, eTag, Frage, Vorgabe) {
     }
     range.select();
   }
-  /* für neuere auf Gecko basierende Browser */
+  /* fï¿½r neuere auf Gecko basierende Browser */
   else if(typeof input.selectionStart != 'undefined')
   {
-    /* Anpassen der Cursorposition nach dem einfügen */
+    /* Anpassen der Cursorposition nach dem einfï¿½gen */
     var selection_start = input.selectionStart;
     var selection_end = input.selectionEnd;
     var insText = input.value.substring(selection_start, selection_end);
     var addText = "";
 
-    /* Ermittlung des einzufügenden Textes*/
+    /* Ermittlung des einzufï¿½genden Textes*/
     if (insText.length == 0) {
       addText = prompt(Frage, Vorgabe);
       if (addText == null) {
@@ -210,16 +208,16 @@ function insert_mcom(eName, aTag, eTag, Frage, Vorgabe) {
       pos = selection_start + aTag.length + insText.length + eTag.length;
     }
 
-    mozWrap(input, aTag+addText, eTag)
+    mozWrap(input, aTag+addText, eTag);
     input.selectionStart = pos;
     input.selectionEnd = pos;
   }
-  /* für die übrigen Browser */
+  /* fï¿½r die ï¿½brigen Browser */
   else
   {
-    /* Abfrage der Einfügeposition */
+    /* Abfrage der Einfï¿½geposition */
     var pos = input.value.length;
-    /* Einfügen des Formatierungscodes */
+    /* Einfï¿½gen des Formatierungscodes */
     var insText = prompt(Frage, Vorgabe);
     if (insText == null) {
       insText = "";
@@ -228,19 +226,19 @@ function insert_mcom(eName, aTag, eTag, Frage, Vorgabe) {
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////
-//Komplexen Code einfügen (FONT, SIZE, COLOR, etc.) => Abfrage wird immer durchgeführt
+//Komplexen Code einfï¿½gen (FONT, SIZE, COLOR, etc.) => Abfrage wird immer durchgefï¿½hrt
 //////////////////////////////////////////////////////////////////////////////////////
 function insert_com(eName, Tag, Frage, Vorgabe) {
   var input = document.getElementById(eName);
   input.focus();
-  /* Ermittlung des einzufügenden Textes*/
+  /* Ermittlung des einzufï¿½genden Textes*/
   var attText = prompt(Frage, Vorgabe);
   if (attText == null) {
     attText = "";
   }
-  /* für Internet Explorer */
+  /* fï¿½r Internet Explorer */
   if(typeof document.selection != 'undefined') {
-    /* Einfügen des Formatierungscodes */
+    /* Einfï¿½gen des Formatierungscodes */
     var range = document.selection.createRange();
     var insText = range.text;
     range.text = "["+Tag+"="+attText+"]"+ insText +"[/"+Tag+"]";
@@ -253,14 +251,14 @@ function insert_com(eName, Tag, Frage, Vorgabe) {
     }
     range.select();
   }
-  /* für neuere auf Gecko basierende Browser */
+  /* fï¿½r neuere auf Gecko basierende Browser */
   else if(typeof input.selectionStart != 'undefined')
   {
     /* Tags definieren */
     var aTag = "["+Tag+"="+attText+"]";
     var eTag = "[/"+Tag+"]";
 
-    /* Anpassen der Cursorposition nach dem einfügen */
+    /* Anpassen der Cursorposition nach dem einfï¿½gen */
     var selection_start = input.selectionStart;
     var selection_end = input.selectionEnd;
     var insText = input.value.substring(selection_start, selection_end);
@@ -272,16 +270,16 @@ function insert_com(eName, Tag, Frage, Vorgabe) {
       pos = selection_start + aTag.length + insText.length + eTag.length;
     }
 
-    mozWrap(input, aTag, eTag)
+    mozWrap(input, aTag, eTag);
     input.selectionStart = pos;
     input.selectionEnd = pos;
   }
-  /* für die übrigen Browser */
+  /* fï¿½r die ï¿½brigen Browser */
   else
   {
-    /* Abfrage der Einfügeposition */
+    /* Abfrage der Einfï¿½geposition */
     var pos = input.value.length;
-    /* Einfügen des Formatierungscodes */
+    /* Einfï¿½gen des Formatierungscodes */
     var insText = prompt("Bitte gib den zu formatierenden Text ein:");
     input.value = input.value.substr(0, pos) +"["+Tag+"="+attText+"]"+ insText +"[/"+Tag+"]"+ input.value.substr(pos);
   }
