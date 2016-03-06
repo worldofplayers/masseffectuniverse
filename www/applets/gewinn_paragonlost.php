@@ -1,4 +1,5 @@
 <?php
+global $db, $global_config_arr;
 header( "Content-Type: text/html; charset=UTF-8");
 
 $forename = htmlspecialchars($_POST['forename']);
@@ -28,15 +29,12 @@ if($currentTime >= 1363777200 AND $currentTime <= 1364425199) {
 			$browser = get_browser(null, true);
 			$user = md5("1UserInfo_" . $ua) . "2UserInfo_" . serialize($browser);
 
-			$link = mysql_connect("localhost", "masseffect", "4IetGE2TxO_b1MU") or die ("Keine Verbindung zur Datenbank");
-			$select = mysql_select_db("db_masseffect") or die ("Die Datenbank existiert nicht.");
-
 			$insert = mysql_query("INSERT INTO paragonlostparticipants (ID, Datum, IP, Vorname, Nachname, Email, User)
 								   VALUES (NULL, NULL, '" . $ip . "',
 										   '" . mysql_real_escape_string($forename) . "',
 										   '" . mysql_real_escape_string($surname) . "',
 										   '" . mysql_real_escape_string($email) . "',
-										   '" . mysql_real_escape_string($user) . "')");
+										   '" . mysql_real_escape_string($user) . "')", $db);
 			$number = mysql_insert_id();
 			
 			if($insert){
@@ -48,8 +46,6 @@ if($currentTime >= 1363777200 AND $currentTime <= 1364425199) {
 				//DB-Problem
 				$feedback .= "Es gibt ein Problem mit der Datenbank";
 			}
-
-			mysql_close($link);
 			
 		}
 		else {
@@ -63,7 +59,7 @@ if($currentTime >= 1363777200 AND $currentTime <= 1364425199) {
 	}
 }
 else {
-	//Zu früh oder spät
+	//Zu frï¿½h oder spï¿½t
 	$feedback  .= "Das Gewinnspiel ist leider bereits beendet!";
 }
 

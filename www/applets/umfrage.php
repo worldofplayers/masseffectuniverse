@@ -1,4 +1,5 @@
 <?php
+global $db, $global_config_arr;
 $results = array();
 $results = $_POST;
 if(isset($_COOKIE['meu_poll']))
@@ -74,20 +75,16 @@ else{
 		//IP
 		$ip = $_SERVER['REMOTE_ADDR'];
 
-		//DB-Connect
-        mysql_connect("localhost", "masseffect", "4IetGE2TxO_b1MU") or die(mysql_error());
-        mysql_select_db("db_masseffect") or die(mysql_error());
-		
 		$sperre = $time_now - 120; 
 		
-		$ip_delete = mysql_query("DELETE FROM ipban WHERE time < '$sperre'") or die(mysql_error());
+		$ip_delete = mysql_query("DELETE FROM ipban WHERE time < '$sperre'", $db) or die(mysql_error());
 		
-		$check = mysql_query("SELECT ip FROM ipban WHERE ip='$ip'") or die(mysql_error());
+		$check = mysql_query("SELECT ip FROM ipban WHERE ip='$ip'", $db) or die(mysql_error());
 		if(@!mysql_fetch_array($check)){
 			
-			$ip_write = mysql_query("INSERT INTO poll (lang, Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9_1, Q9_2, Q10, Q11, Q12, Q13, Q14, Q15, Q16, Q17, Q18, Q19, Q20, Q21, Q22, Q23, Q24, Q25, Q26, Q27, Q28, Q29, Q30, Q31, Q32, Q33, Q34, Q35, Q36, Q37, Q38) VALUES ('$results[lang]', '$results[q1]', '$results[q2]', '$results[q3]', '$results[q4]', '$results[q5]', '$results[q6]', '$results[q7]', '$results[q8]', '$results[q9_1]', '$results[q9_2]', '$results[q10]', '$results[q11]', '$results[q12]', '$results[q13]', '$results[q14]', '$results[q15]', '$results[q16]', '$results[q17]', '$results[q18]', '$results[q19]', '$results[q20]', '$results[q21]', '$results[q22]', '$results[q23]', '$results[q24]', '$results[q25]', '$results[q26]', '$results[q27]', '$results[q28]', '$results[q29]', '$results[q30]', '$results[q31]', '$results[q32]', '$results[q33]', '$results[q34]', '$results[q35]', '$results[q36]', '$results[q37]', '$results[q38]')");
+			$ip_write = mysql_query("INSERT INTO poll (lang, Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9_1, Q9_2, Q10, Q11, Q12, Q13, Q14, Q15, Q16, Q17, Q18, Q19, Q20, Q21, Q22, Q23, Q24, Q25, Q26, Q27, Q28, Q29, Q30, Q31, Q32, Q33, Q34, Q35, Q36, Q37, Q38) VALUES ('$results[lang]', '$results[q1]', '$results[q2]', '$results[q3]', '$results[q4]', '$results[q5]', '$results[q6]', '$results[q7]', '$results[q8]', '$results[q9_1]', '$results[q9_2]', '$results[q10]', '$results[q11]', '$results[q12]', '$results[q13]', '$results[q14]', '$results[q15]', '$results[q16]', '$results[q17]', '$results[q18]', '$results[q19]', '$results[q20]', '$results[q21]', '$results[q22]', '$results[q23]', '$results[q24]', '$results[q25]', '$results[q26]', '$results[q27]', '$results[q28]', '$results[q29]', '$results[q30]', '$results[q31]', '$results[q32]', '$results[q33]', '$results[q34]', '$results[q35]', '$results[q36]', '$results[q37]', '$results[q38]')", $db);
 			$number2 = mysql_insert_id();
-			$Q_write = mysql_query("INSERT INTO ipban (ip, time) VALUES ('$ip', '$time_now')");
+			$Q_write = mysql_query("INSERT INTO ipban (ip, time) VALUES ('$ip', '$time_now')", $db);
 			
 			if($ip_write AND $Q_write){
 				//$get_number = mysql_query("SELECT ID FROM poll ORDER by ID DESC LIMIT 1");

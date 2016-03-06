@@ -1,4 +1,5 @@
 <?php
+global $db, $global_config_arr;
 header( "Content-Type: text/html; charset=UTF-8");
 
 $forename = htmlspecialchars($_POST['forename']);
@@ -15,11 +16,8 @@ $currentTime = time();
 if($currentTime >= 1356332400 AND $currentTime <= 1356389999) {
 	if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
 		$ip = $_SERVER['REMOTE_ADDR'];
-
-		$link = mysql_connect("localhost", "masseffect", "4IetGE2TxO_b1MU") or die ("Keine Verbindung zur Datenbank");
-		$select = mysql_select_db("db_masseffect") or die ("Die Datenbank existiert nicht.");
 		
-		$checkIP = mysql_query("SELECT IP FROM xmascontest WHERE ip='" . $ip . "'") or die("Die Tabelle existiert nicht");
+		$checkIP = mysql_query("SELECT IP FROM xmascontest WHERE ip='" . $ip . "'", $db) or die("Die Tabelle existiert nicht");
 		
 		if(@!mysql_fetch_array($checkIP)) {
 			$insert = mysql_query("INSERT INTO xmascontest (ID, Datum, IP, Vorname, Nachname, Email, Plattform)
@@ -27,7 +25,7 @@ if($currentTime >= 1356332400 AND $currentTime <= 1356389999) {
 										   '" . mysql_real_escape_string($forename) . "',
 										   '" . mysql_real_escape_string($surname) . "',
 										   '" . mysql_real_escape_string($email) . "',
-										   '" . mysql_real_escape_string($platform) . "')");
+										   '" . mysql_real_escape_string($platform) . "')", $db);
 			$number = mysql_insert_id();
 			if($insert){
 				$feedback .= "Vielen Dank, dass du teilgenommen hast!<br>Du bist nun im Lostopf.";
@@ -42,8 +40,6 @@ if($currentTime >= 1356332400 AND $currentTime <= 1356389999) {
 			$feedback .= "Du hast bereits teilgenommen!";
 		}
 		
-		mysql_close($link);
-		
 	}
 	else {
 		//Email nicht korrekt
@@ -51,7 +47,7 @@ if($currentTime >= 1356332400 AND $currentTime <= 1356389999) {
 	}
 }
 else {
-	//Zu früh oder spät
+	//Zu frï¿½h oder spï¿½t
 	$feedback  .= "Das Gewinnspiel ist leider bereits beendet.";
 }
 

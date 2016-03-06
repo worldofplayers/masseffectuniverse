@@ -1,7 +1,5 @@
 <?php
-
-mysql_connect("localhost", "masseffect", "4IetGE2TxO_b1MU" /* "uf6w4kighIaE" */) or die(mysql_error());
-mysql_select_db("db_masseffect") or die(mysql_error());
+global $db, $global_config_arr;
 
 if (isset($_POST['rating']) && isset($_POST['id']) && isset($_POST['art'])) {
 
@@ -12,10 +10,10 @@ if (isset($_POST['rating']) && isset($_POST['id']) && isset($_POST['art'])) {
 	if(is_numeric($rating) && is_numeric($id)){
 
 		if($art == "news"){
-			$query = mysql_query("SELECT rating, total_rating, total_ratings FROM fs2_news WHERE news_id = '".$id."'") or die(mysql_error());
+			$query = mysql_query("SELECT rating, total_rating, total_ratings FROM fs2_news WHERE news_id = '".$id."'", $db) or die(mysql_error());
 		}
 		elseif($art == "article"){
-			$query = mysql_query("SELECT rating, total_rating, total_ratings FROM fs2_articles WHERE article_id = '".$id."'") or die(mysql_error());
+			$query = mysql_query("SELECT rating, total_rating, total_ratings FROM fs2_articles WHERE article_id = '".$id."'", $db) or die(mysql_error());
 		}
 		else{
 			exit();
@@ -48,15 +46,15 @@ if (isset($_POST['rating']) && isset($_POST['id']) && isset($_POST['art'])) {
 				//DB
 				
 				if($art == "news"){
-					mysql_query("UPDATE fs2_news SET total_rating = '".$new_total_rating."' WHERE news_id = '".$id."'") or die(mysql_error());
-					mysql_query("UPDATE fs2_news SET rating = '".$new_rating."' WHERE news_id = '".$id."'") or die(mysql_error());
-					mysql_query("UPDATE fs2_news SET total_ratings = '".$new_total_ratings."' WHERE news_id = '".$id."'") or die(mysql_error());
+					mysql_query("UPDATE fs2_news SET total_rating = '".$new_total_rating."' WHERE news_id = '".$id."'", $db) or die(mysql_error());
+					mysql_query("UPDATE fs2_news SET rating = '".$new_rating."' WHERE news_id = '".$id."'", $db) or die(mysql_error());
+					mysql_query("UPDATE fs2_news SET total_ratings = '".$new_total_ratings."' WHERE news_id = '".$id."'", $db) or die(mysql_error());
 
 				}
 				else {
-					mysql_query("UPDATE fs2_articles SET total_rating = '".$new_total_rating."' WHERE article_id = '".$id."'") or die(mysql_error());
-					mysql_query("UPDATE fs2_articles SET rating = '".$new_rating."' WHERE article_id = '".$id."'") or die(mysql_error());
-					mysql_query("UPDATE fs2_articles SET total_ratings = '".$new_total_ratings."' WHERE article_id = '".$id."'") or die(mysql_error());
+					mysql_query("UPDATE fs2_articles SET total_rating = '".$new_total_rating."' WHERE article_id = '".$id."'", $db) or die(mysql_error());
+					mysql_query("UPDATE fs2_articles SET rating = '".$new_rating."' WHERE article_id = '".$id."'", $db) or die(mysql_error());
+					mysql_query("UPDATE fs2_articles SET total_ratings = '".$new_total_ratings."' WHERE article_id = '".$id."'", $db) or die(mysql_error());
 				}
 				
 
