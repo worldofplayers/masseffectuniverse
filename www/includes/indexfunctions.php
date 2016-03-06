@@ -1252,7 +1252,7 @@ function copyright ()
 
 // Zonen
 
-function checkZonecheckZone($kind, $catid)
+function checkZone($kind, $catid)
 {
     global $seozones, $seozonename, $seozonefile;
 
