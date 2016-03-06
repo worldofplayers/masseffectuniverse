@@ -1,4 +1,5 @@
 <?php
+global $db, $global_config_arr;
 
 ////////////////////////////
 //// News Kopf erzeugen ////

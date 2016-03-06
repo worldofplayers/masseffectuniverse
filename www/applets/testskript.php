@@ -1,4 +1,6 @@
 <?php
+global $db, $global_config_arr;
+
 setlocale (LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
 
 $zaehler = 0;

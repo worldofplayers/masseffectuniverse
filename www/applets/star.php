@@ -1,4 +1,6 @@
 <?php
+global $db, $global_config_arr;
+
 
 $url = htmlspecialchars($_GET['go']);
 $average = "";

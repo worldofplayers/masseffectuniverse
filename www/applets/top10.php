@@ -1,4 +1,6 @@
 <?php
+global $db, $global_config_arr;
+
 $cat = $_GET['cat'];
 $ja_nein = "n";
 

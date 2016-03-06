@@ -1,4 +1,6 @@
 <?php
+global $db, $global_config_arr;
+
 $url = $_GET["go"];
 
 $index = mysql_query ( "

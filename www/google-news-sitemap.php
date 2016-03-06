@@ -1,9 +1,11 @@
 <?php
+global $db, $global_config_arr;
+
 /* Einstellungen */
 
-// Dieser Name muss genau mit dem Namen übereinstimmen, der in Ihren Artikeln auf news.google.com angezeigt wird. 
-// Nachstehende Klammern werden jedoch nicht eingefügt. 
-// Wenn in Google News zum Beispiel der Name "Beispielzeitung (Abo)" angezeigt wird, müssen Sie den Namen "Beispielzeitung" verwenden.
+// Dieser Name muss genau mit dem Namen ï¿½bereinstimmen, der in Ihren Artikeln auf news.google.com angezeigt wird. 
+// Nachstehende Klammern werden jedoch nicht eingefï¿½gt. 
+// Wenn in Google News zum Beispiel der Name "Beispielzeitung (Abo)" angezeigt wird, mï¿½ssen Sie den Namen "Beispielzeitung" verwenden.
 
 // Falls dieses Feld leer bleibt, wird der voreingestellte Seitentitel verwendet
 $sitemap['name'] = 'Mass Effect - Universe';

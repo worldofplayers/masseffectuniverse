@@ -1,4 +1,6 @@
 <?php
+global $db, $global_config_arr;
+
 $votes_total = 0;
 $anzahl1 = mysql_query("
                         SELECT SUM(total_ratings)

@@ -30,6 +30,11 @@ try {
     // Connect to DB-Server
     $sql = new sql($dbc['host'], $dbc['data'], $dbc['user'], $dbc['pass'], $dbc['pref']);
 
+    // old connection
+    $db = mysql_connect($dbc['host'], $dbc['user'], $dbc['pass']) or die(mysql_error());
+    mysql_select_db($dbc['data'], $db) or die(mysql_error());
+    $global_config_arr = array('pref' => $dbc['pref']);
+
     // Frogsystem Global Data Array
     $global_data = new GlobalData($sql);
     $FD =& $global_data; // Use shorthand $FD

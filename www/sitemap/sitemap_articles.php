@@ -1,5 +1,7 @@
 <?php
-	require "../login.inc.php"; // DB Connection File
+global $db, $global_config_arr;
+
+require "../login.inc.php"; // DB Connection File
 
 	if ($db) {
 		$xml = '';
