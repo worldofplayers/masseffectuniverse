@@ -4,7 +4,7 @@
 ###################
 ## Page Settings ##
 ###################
-$news_cols = array('cat_id', 'user_id', 'news_date', 'news_title', 'news_text', 'news_active', 'news_comments_allowed', 'news_search_update');
+$news_cols = array('cat_id', 'user_id', 'news_date', 'news_title', 'news_text', 'news_prev', 'news_active', 'news_comments_allowed', 'news_search_update');
 
 $FD->loadConfig('news');
 $config_arr['html'] = in_array($FD->cfg('news', 'html_code'), array(2, 4)) ? $FD->text("admin", "on") : $FD->text("admin", "off");

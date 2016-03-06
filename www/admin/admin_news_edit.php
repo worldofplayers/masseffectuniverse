@@ -367,7 +367,7 @@ function action_comments_delete ( $DATA )
 ## Page Settings ##
 ###################
 $FILE_SHOW_START = true;
-$news_cols = array('news_id', 'cat_id', 'user_id', 'news_date', 'news_title', 'news_text', 'news_active', 'news_comments_allowed', 'news_search_update');
+$news_cols = array('news_id', 'cat_id', 'user_id', 'news_date', 'news_title', 'news_text', 'news_prev', 'news_active', 'news_comments_allowed', 'news_search_update');
 
 $FD->loadConfig('news');
 $config_arr = $FD->configObject('news')->getConfigArray();
@@ -674,7 +674,7 @@ if ( isset($_POST['news_id']) && isset($_POST['news_action']) )
         // Get data from DB
         } else {
             $data = $sql->conn()->query(
-                       'SELECT  news_id, cat_id, user_id, news_date, news_title, news_text, news_active, news_comments_allowed, news_search_update
+                       'SELECT  news_id, cat_id, user_id, news_date, news_title, news_text, news_prev, news_active, news_comments_allowed, news_search_update
                         FROM '.$FD->config('pref').'news
                         WHERE news_id='.intval($_POST['news_id']).' LIMIT 1');
             $data = $data->fetch(PDO::FETCH_ASSOC);
@@ -774,6 +774,7 @@ if ( isset($_POST['news_id']) && isset($_POST['news_action']) )
         $adminpage->addText('fs', $config_arr['fs']);
         $adminpage->addText('para', $config_arr['para']);
         $adminpage->addText('the_editor', create_editor('news_text', $_POST['news_text'], '', '250px', 'full', FALSE));
+        $adminpage->addText('prev_editor', create_editor('news_prev', $_POST['news_prev'], '', '250px', 'full', FALSE));
         $adminpage->addText('link_list', $link_list);
         $adminpage->addText('link_add', $link_add);
 
