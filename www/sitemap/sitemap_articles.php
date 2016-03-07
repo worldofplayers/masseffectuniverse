@@ -1,7 +1,21 @@
 <?php
 global $db, $global_config_arr;
 
-require "../login.inc.php"; // DB Connection File
+/* FS2 PHP Init */
+set_include_path('.');
+define('FS2_ROOT_PATH', '../', true);
+require_once(FS2_ROOT_PATH . 'includes/phpinit.php');
+phpinit();
+/* End of FS2 PHP Init */
+
+// Inlcude DB Connection File or exit()
+require_once(FS2_ROOT_PATH . 'login.inc.php');
+
+//Include Functions-Files
+require_once(FS2_ROOT_PATH . 'classes/exceptions.php');
+require_once(FS2_ROOT_PATH . 'includes/cookielogin.php');
+require_once(FS2_ROOT_PATH . 'includes/imagefunctions.php');
+require_once(FS2_ROOT_PATH . 'includes/indexfunctions.php');
 
 	if ($db) {
 		$xml = '';

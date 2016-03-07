@@ -18,10 +18,21 @@ $sitemap['days'] = 4;
 
 header("Content-type: application/xml");
 
-set_include_path ('.');
-define (FS2_ROOT_PATH, "/", TRUE);
+/* FS2 PHP Init */
+set_include_path('.');
+define('FS2_ROOT_PATH', './', true);
+require_once(FS2_ROOT_PATH . 'includes/phpinit.php');
+phpinit();
+/* End of FS2 PHP Init */
 
-require(FS2_ROOT_PATH . "login.inc.php");
+// Inlcude DB Connection File or exit()
+require_once(FS2_ROOT_PATH . 'login.inc.php');
+
+//Include Functions-Files
+require_once(FS2_ROOT_PATH . 'classes/exceptions.php');
+require_once(FS2_ROOT_PATH . 'includes/cookielogin.php');
+require_once(FS2_ROOT_PATH . 'includes/imagefunctions.php');
+require_once(FS2_ROOT_PATH . 'includes/indexfunctions.php');
 
 if($db) {
 	include(FS2_ROOT_PATH . "includes/functions.php");

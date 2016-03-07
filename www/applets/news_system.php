@@ -5,7 +5,7 @@ setlocale (LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
 
 $template = "";
 $zaehler = 0;
-$index = mysql_query("select * from ".$global_config_arr[pref]."news_config", $db);
+$index = mysql_query("select * from f2_news_config", $db);
 $config_arr = mysql_fetch_assoc($index);
 $limit = $config_arr[num_news];
 
@@ -76,7 +76,7 @@ while($row = mysql_fetch_array($news_long)){
     $prev_text = fscode ( $prev_text, $fs, $html, $para );
     $title = killhtml ( $title );
 	
-	$comments = mysql_query("SELECT comment_id FROM ".$global_config_arr[pref]."news_comments WHERE news_id = $id", $db);
+	$comments = mysql_query("SELECT comment_id FROM fs2_news_comments WHERE news_id = $id", $db);
 	$comments_num = mysql_num_rows($comments);
 	if($comments_num == 1)
 		$kommentar = "Kommentar";
