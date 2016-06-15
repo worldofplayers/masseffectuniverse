@@ -10,9 +10,9 @@ $limit = 17;
 $timestamp = time();
 
 $news_long = mysql_query("
-                        SELECT N.news_id, N.news_title, N.news_date, N.news_prev, N.rating, COUNT(C.content_id) AS comments_num
+                        SELECT N.news_id, N.news_title, N.news_date, N.news_prev, N.rating, 1 AS comments_num
                         FROM fs2_news N
-                        LEFT JOIN fs2_comments C ON C.content_id = N.news_id AND C.content_type =  'news'
+
 						WHERE news_active = 1 AND news_date <=" . $timestamp ."
                         GROUP BY N.news_id
 						ORDER BY news_date DESC
@@ -21,12 +21,13 @@ $news_long = mysql_query("
 
 while($row = mysql_fetch_array($news_long)){
 
+	$comments = $FD->sql()->conn()->query('SELECT COUNT(1) as comments_num FROM '.$FD->config('pref').'comments WHERE content_id = '.$row['news_id'].' AND content_type=\'news\'');
 	$title = $row['news_title'];
 	$prev_text = $row['news_prev'];
 	$id = $row['news_id'];
 	$date = $row['news_date'];
 	$rating = $row['rating'];
-	$comments_num = $row['comments_num'];
+	$comments_num = $comments->fetchColumn(0);
 
 	switch ($config_arr[html_code])
 	{
@@ -105,9 +106,8 @@ while($row = mysql_fetch_array($news_long)){
 $limit -= 3;
 
 $news_short = mysql_query("
-                        SELECT N.news_id, N.news_title, N.news_date, COUNT(C.content_id) AS comments_num
+                        SELECT N.news_id, N.news_title, N.news_date
                         FROM fs2_news N
-                        LEFT JOIN fs2_comments C ON C.content_id = N.news_id AND C.content_type =  'news'
 						WHERE news_active = 1 AND news_date <=" . $timestamp ."
                         GROUP BY N.news_id
 						ORDER BY news_date DESC
@@ -118,13 +118,14 @@ $template .= "<div class=\"content_beg\"></div><div class=\"content\">";
 
 while($row = mysql_fetch_array($news_short)){
 
+	$comments = $FD->sql()->conn()->query('SELECT COUNT(1) as comments_num FROM '.$FD->config('pref').'comments WHERE content_id = '.$row['news_id'].' AND content_type=\'news\'');
 	$date = $row['news_date'];
 	$title = $row['news_title'];
 	$id = $row['news_id'];
 	$title = killhtml ($title);
 	$tag = strftime("%A, %d.%m", $date);
 	$zeit = strftime("%H:%M", $date);
-	$comments_num = $row['comments_num'];
+	$comments_num = $comments->fetchColumn(0);
 
 	/*News-Tabellen-Start*/
 
